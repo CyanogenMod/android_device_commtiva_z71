@@ -1,12 +1,32 @@
 USE_CAMERA_STUB := true
+#BUILD_LIBCAMERA := true
+#BOARD_CAMERA_LIBRARIES := liboemcamera
+#USE_CAMERA_STUB:= false
+
+BOARD_USES_QCOM_HARDWARE := true
+BOARD_USES_QCOM_LIBS := true
+BOARD_HAVE_BLUETOOTH := true
+
+WIFI_DRIVER_MODULE_NAME     := "ar6000"
+WIFI_DRIVER_MODULE_PATH     := "rfkill"
+BOARD_WPA_SUPPLICANT_DRIVER:=WEXT
+
 
 # inherit from the proprietary version
 -include vendor/commtiva/z71/BoardConfigVendor.mk
 
 TARGET_NO_BOOTLOADER := true
-TARGET_BOARD_PLATFORM := unknown
+#TARGET_NO_RECOVERY := true
+TARGET_CPU_ABI := armeabi
+TARGET_ARCH_VARIANT := armv6j
+TARGET_BOARD_PLATFORM := msm7k
 TARGET_CPU_ABI := armeabi
 TARGET_BOOTLOADER_BOARD_NAME := z71
+
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
+#TARGET_USES_2G_VM_SPLIT := true
+
+BOARD_GPS_LIBRARIES := libloc_api
 
 BOARD_KERNEL_CMDLINE := 
 BOARD_KERNEL_BASE := 0x12e00000
@@ -21,21 +41,3 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 
 TARGET_PREBUILT_KERNEL := device/commtiva/z71/kernel
 
-# Below is a sample of how you can tweak the mount points using the board config.
-# This is for the Samsung Galaxy S.
-# Feel free to tweak or remove this code.
-# If you want to add/tweak a mount point, the BOARD_X_FILESYSTEM_OPTIONS are optional.
-#BOARD_DATA_DEVICE := /dev/block/mmcblk0p2
-#BOARD_DATA_FILESYSTEM := auto
-#BOARD_DATA_FILESYSTEM_OPTIONS := llw,check=no,nosuid,nodev
-#BOARD_HAS_DATADATA := true
-#BOARD_DATADATA_DEVICE := /dev/block/stl10
-#BOARD_DATADATA_FILESYSTEM := auto
-#BOARD_DATADATA_FILESYSTEM_OPTIONS := llw,check=no,nosuid,nodev
-#BOARD_SYSTEM_DEVICE := /dev/block/stl9
-#BOARD_SYSTEM_FILESYSTEM := auto
-#BOARD_SYSTEM_FILESYSTEM_OPTIONS := llw,check=no
-#BOARD_CACHE_DEVICE := /dev/block/stl11
-#BOARD_CACHE_FILESYSTEM := auto
-#BOARD_CACHE_FILESYSTEM_OPTIONS := llw,check=no,nosuid,nodev
-#BOARD_SDEXT_DEVICE := /dev/block/mmcblk1p2
