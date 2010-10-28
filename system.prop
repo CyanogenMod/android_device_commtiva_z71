@@ -15,3 +15,4 @@ persist.rild.nitz_short_ons_2=
 persist.rild.nitz_short_ons_3=
 DEVICE_PROVISIONED=1
 debug.sf.hw=0
+ro.opengles.version = 131072
