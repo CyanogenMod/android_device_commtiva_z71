@@ -81,6 +81,7 @@ PRODUCT_COPY_FILES += \
 
 ## OMX proprietaries
 PRODUCT_COPY_FILES += \
+    device/commtiva/z71/proprietary/lib/libmm-adspsvc.so:system/lib/libmm-adspsvc.so \
     device/commtiva/z71/proprietary/lib/libOmxAacDec.so:system/lib/libOmxAacDec.so \
     device/commtiva/z71/proprietary/lib/libOmxAmrRtpDec.so:system/lib/libOmxAmrRtpDec.so \
     device/commtiva/z71/proprietary/lib/libOmxH264Dec.so:system/lib/libOmxH264Dec.so \
