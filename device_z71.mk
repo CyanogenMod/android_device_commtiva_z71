@@ -106,7 +106,7 @@ PRODUCT_COPY_FILES += \
     device/commtiva/z71/proprietary/etc/firmware/eeprom.bin:system/etc/firmware/eeprom.bin \
     device/commtiva/z71/proprietary/etc/firmware/athwlan.bin.z77:system/etc/firmware/athwlan.bin.z77 \
     device/commtiva/z71/proprietary/bin/hci_qcomm_init:system/bin/hci_qcomm_init \
-    device/commtiva/z71/init.qcom.bt.sh:system/bin/init.qcom.bt.sh \
+    device/commtiva/z71/prebuilt/init.qcom.bt.sh:system/bin/init.qcom.bt.sh \
 	device/commtiva/z71/proprietary/lib/libms3c_yamaha.so:system/lib/libms3c_yamaha.so \
 	device/commtiva/z71/proprietary/lib/libsensor_yamaha.so:system/lib/libsensor_yamaha.so \
 	device/commtiva/z71/ms3c_charger_offset.cfg:system/etc/ms3c_charger_offset.cfg \
