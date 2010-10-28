@@ -1,3 +1,17 @@
+## This device is the Commtiva Z1, and all its variants, which include:
+# Optimus Boston
+# Orange Boston
+# Gigabyte Gsmart G1305
+# Motorola XT502
+# Apanda A60
+# Vibo A688
+# Chinavision Excalibur
+# Muchtel A1
+# Wellcom A88
+# Cincinnati Bell Blaze
+# Spice Mi-300
+#
+
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 # The gps config appropriate for this device
