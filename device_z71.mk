@@ -127,6 +127,7 @@ PRODUCT_COPY_FILES += \
 	device/commtiva/z71/ms3c_transformation.cfg:system/etc/ms3c_transformation.cfg \
 	device/commtiva/z71/proprietary/bin/updateSensorNV:system/bin/updateSensorNV \
 	device/commtiva/z71/proprietary/bin/sensorserver_yamaha:system/bin/sensorserver_yamaha \
+	device/commtiva/z71/prebuilt/sensordaemon:system/bin/sensordaemon \
 	device/commtiva/z71/proprietary/lib/hw/sensors.qcom.so:system/lib/hw/sensors.qcom.so \
 	device/commtiva/z71/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
 	device/commtiva/z71/AudioFilter.csv:system/etc/AudioFilter.csv \
