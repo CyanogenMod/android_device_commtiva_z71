@@ -151,6 +151,7 @@ PRODUCT_COPY_FILES += \
 ### TEMPORARY NOTE
 
 PRODUCT_COPY_FILES += \
+	device/commtiva/z71/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \
 	device/commtiva/z71/vold.fstab:system/etc/vold.fstab \
 	device/commtiva/z71/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 
