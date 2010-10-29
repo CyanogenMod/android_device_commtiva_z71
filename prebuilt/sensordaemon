@@ -1,11 +1,12 @@
 #!/system/bin/sh
 
 ## Assumes busybox is installed
-## For some reason, sensors need /system writeable on start, or
+## For some reason, sensors need /system writeable, or
 #  else the X-axis will be inverted
 
 stop sensor-daemon
 /system/xbin/mount -o remount,rw /system
 start sensor-daemon
-sleep 2;
-/system/xbin/mount -o remount,ro /system
+# Can't go back to readonly, or inversion will happen eventually
+#sleep 20;
+#/system/xbin/mount -o remount,ro /system
