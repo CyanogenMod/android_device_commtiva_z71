@@ -34,7 +34,7 @@
 #include "AudioHardware.h"
 #include <media/AudioRecord.h>
 
-#define LOG_SND_RPC 1  // Set to 1 to log sound RPC's
+#define LOG_SND_RPC 0  // Set to 1 to log sound RPC's
 
 #define COMBO_DEVICE_SUPPORTED 0 // Headset speaker combo device not supported on this target
 #define DUALMIC_KEY "dualmic_enabled"
@@ -1119,6 +1119,7 @@ status_t AudioHardware::doAudioRouteOrMute(uint32_t device)
         }
     }
 #endif
+	mMicMute = 0;
     LOGV("doAudioRouteOrMute() device %x, mMode %d, mMicMute %d", device, mMode, mMicMute);
     return do_route_audio_rpc(device,
                               mMode != AudioSystem::MODE_IN_CALL, mMicMute, m7xsnddriverfd);
