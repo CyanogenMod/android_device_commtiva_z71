@@ -12,6 +12,7 @@ on nand
     chmod 0777 /misc2
 
     chmod 666 /dev/oncrpc/3000000e:00060000
+
 	## Needed because sensor_server runs as system
 	chmod 666 /dev/compass
 
@@ -49,6 +50,9 @@ on boot
 	## Wifi RFKill
     chown wifi wifi /sys/class/rfkill/rfkill1/state
     chmod 0660 /sys/class/rfkill/rfkill1/state
+
+    ## Enable trackball
+    write /sys/module/minitrackball/parameters/lockjogball 0
 
 on property:init.svc.bluetoothd=running
     write /sys/devices/virtual/bluetooth/hci0/idle_timeout 7000
