@@ -13,6 +13,8 @@ on nand
 
     chmod 666 /dev/oncrpc/3000000e:00060000
 
+    ## Used by libsensors
+    symlink /dev/lightsensor /dev/cm3602_alsps
 	## Needed because sensor_server runs as system
 	chmod 666 /dev/compass
 
