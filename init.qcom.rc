@@ -18,9 +18,6 @@ on nand
 	## Needed because sensor_server runs as system
 	chmod 666 /dev/compass
 
-	## RIL needs this
-	mkdir /data/radio
-
 on early-init
     exec /sbin/hwprops
 
@@ -33,6 +30,9 @@ on property:dev.bootcomplete=1
 
 #---enable keypad interrupt until boot complete
 on boot
+    ## RIL needs this
+    mkdir /data/radio 0777
+
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
