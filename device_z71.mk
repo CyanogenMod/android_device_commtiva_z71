@@ -132,7 +132,6 @@ PRODUCT_COPY_FILES += \
 	device/commtiva/z71/proprietary/lib/hw/sensors.qcom.so:system/lib/hw/sensors.qcom.so \
 	device/commtiva/z71/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
 	device/commtiva/z71/AudioFilter.csv:system/etc/AudioFilter.csv \
-	device/commtiva/z71/proprietary/lib/libaudio.so:system/lib/libaudio.so \
 	device/commtiva/z71/proprietary/lib/liba2dp.so:system/lib/liba2dp.so \
 	device/commtiva/z71/proprietary/lib/libaudioeq.so:system/lib/libaudioeq.so \
 	device/commtiva/z71/proprietary/lib/egl/egl.cfg:system/lib/egl/egl.cfg \
