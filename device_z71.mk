@@ -110,10 +110,16 @@ PRODUCT_COPY_FILES += \
     frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
     frameworks/base/data/etc/android.hardware.touchscreen.multitouch.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.xml
 
-## GPS - this is the actually standard libloc_api, but with the RPC program 
+## GPS - this is actually the standard libloc_api, but with the RPC program
 #       version changed from 10001 to 40001
 PRODUCT_COPY_FILES += \
 	device/commtiva/z71/prebuilt/libloc_api.so:system/lib/libloc_api.so
+
+## Camera proprietaries
+PRODUCT_COPY_FILES += \
+    device/commtiva/z71/proprietary/lib/liboemcamera.so:system/lib/liboemcamera.so \
+    device/commtiva/z71/proprietary/lib/libmmjpeg.so:system/lib/libmmjpeg.so \
+    device/commtiva/z71/proprietary/lib/libmmipl.so:system/lib/libmmipl.so
 
 ## Other libraries and proprietary binaries
 PRODUCT_COPY_FILES += \
