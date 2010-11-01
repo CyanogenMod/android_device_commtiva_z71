@@ -88,8 +88,8 @@ service abtfilt /system/bin/abtfilt -c -d -z -n
 service sensor-daemon /system/bin/sensorserver_yamaha
     #user compass
     #user should be compass, but then we miss permissions to register the service
-    user system
-    group system 
+    user root
+    group root 
 
 service sensor-fix /system/bin/sensordaemon
     disabled
