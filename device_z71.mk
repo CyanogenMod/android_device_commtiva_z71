@@ -68,7 +68,6 @@ PRODUCT_COPY_FILES += \
     device/commtiva/z71/proprietary/lib/libdss.so:system/lib/libdss.so \
     device/commtiva/z71/proprietary/lib/libqmi.so:system/lib/libqmi.so \
     device/commtiva/z71/proprietary/lib/libdiag.so:system/lib/libdiag.so \
-    device/commtiva/z71/proprietary/lib/libdiag.so:system/lib/libdiag.so \
     device/commtiva/z71/proprietary/lib/libpbmlib.so:system/lib/libpbmlib.so \
     device/commtiva/z71/proprietary/lib/libauth.so:system/lib/libauth.so \
     device/commtiva/z71/proprietary/lib/liboem_rapi.so:system/lib/liboem_rapi.so \
@@ -114,6 +113,12 @@ PRODUCT_COPY_FILES += \
 #       version changed from 10001 to 40001
 PRODUCT_COPY_FILES += \
 	device/commtiva/z71/prebuilt/libloc_api.so:system/lib/libloc_api.so
+
+## vold - this is actually the standard vold, but with the old LUN path for
+#       the SD-card at line 812 and 866. Temporary, until the kernel is updated
+#
+PRODUCT_COPY_FILES += \
+	device/commtiva/z71/prebuilt/vold:system/bin/vold
 
 ## Camera proprietaries
 PRODUCT_COPY_FILES += \
