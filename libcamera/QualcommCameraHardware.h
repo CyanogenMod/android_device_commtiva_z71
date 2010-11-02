@@ -75,7 +75,9 @@ struct board_property{
 #define JPEG_EVENT_DONE 0
 #define CAM_CTRL_SUCCESS 1
 
-
+#define MINIMUM_FPS 10
+#define DEFAULT_FPS 15
+#define MAXIMUM_FPS 20
 
 typedef struct {
 	unsigned int in1_w;
@@ -153,8 +155,8 @@ enum {
 
 enum {
 	LED_MODE_OFF,
-	LED_MODE_ON,
 	LED_MODE_AUTO,
+	LED_MODE_ON,
 };
 
 typedef enum {
@@ -498,6 +500,12 @@ private:
     friend void *snapshot_thread(void *user);
     void runSnapshotThread(void *data);
     Mutex mRawPictureHeapLock;
+    bool mJpegThreadRunning;
+    Mutex mJpegThreadWaitLock;
+    Condition mJpegThreadWait;
+    bool mInSnapshotMode;
+    Mutex mInSnapshotModeWaitLock;
+    Condition mInSnapshotModeWait;
 
     void debugShowPreviewFPS() const;
     void debugShowVideoFPS() const;
@@ -505,11 +513,13 @@ private:
     int mSnapshotFormat;
     void filterPictureSizes();
     void filterPreviewSizes();
+    void storeTargetType();
 
     void initDefaultParameters();
     void findSensorType();
 
     status_t setPreviewSize(const CameraParameters& params);
+    status_t setPreviewFrameRate(const CameraParameters& params);
     status_t setPictureSize(const CameraParameters& params);
     status_t setJpegQuality(const CameraParameters& params);
     status_t setAntibanding(const CameraParameters& params);
@@ -577,11 +587,12 @@ private:
 
     common_crop_t mCrop;
 
+    bool mInitialized;
+
     int mBrightness;
     int mHJR;
     struct msm_frame frames[kPreviewBufferCount];
     struct msm_frame *recordframes;
-    bool *record_buffers_tracking_flag;
     bool mInPreviewCallback;
     bool mUseOverlay;
     sp<Overlay>  mOverlay;
