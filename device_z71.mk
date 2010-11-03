@@ -114,12 +114,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
 	device/commtiva/z71/prebuilt/libloc_api.so:system/lib/libloc_api.so
 
-## vold - this is actually the standard vold, but with the old LUN path for
-#       the SD-card at line 812 and 866. Temporary, until the kernel is updated
-#
-PRODUCT_COPY_FILES += \
-	device/commtiva/z71/prebuilt/vold:system/bin/vold
-
 ## Camera proprietaries
 PRODUCT_COPY_FILES += \
     device/commtiva/z71/proprietary/lib/liboemcamera.so:system/lib/liboemcamera.so \
