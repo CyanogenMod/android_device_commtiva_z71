@@ -15,7 +15,7 @@
 ** limitations under the License.
 */
 
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_NIDEBUG 0
 #define LOG_TAG "QualcommCameraHardware"
 #include <utils/Log.h>
@@ -200,6 +200,7 @@ board_property boardProperties[] = {
 //sorted on column basis
 static const camera_size_type picture_sizes[] = {
     { 2592, 1944 }, // 5MP
+    { 2560, 1920 }, // 5MP (slightly reduced)
     { 2048, 1536 }, // 3MP QXGA
     { 1920, 1080 }, //HD1080
     { 1600, 1200 }, // 2MP UXGA
@@ -605,6 +606,7 @@ struct SensorType {
 
 static SensorType sensorTypes[] = {
         { "5mp", 2608, 1960, true,  2592, 1944,0x00000fff },
+        { "5mp", 5184, 1944, true,  2592, 1944,0x00000fff },
         { "3mp", 2064, 1544, false, 2048, 1536,0x000007ff },
         { "2mp", 3200, 1200, false, 1600, 1200,0x000007ff } };
 
@@ -3829,7 +3831,12 @@ status_t QualcommCameraHardware::setPictureSize(const CameraParameters& params)
     // Validate the picture size
     for (int i = 0; i < supportedPictureSizesCount; ++i) {
         if (width == picture_sizes_ptr[i].width
-          && height == picture_sizes_ptr[i].height) {
+                && height == picture_sizes_ptr[i].height) {
+            if (!strcmp(mSensorInfo.name, "ov5642") 
+					&& width == 2592) {
+				/* WTF... The max this "5MPx" sensor supports is 4.75 */
+                width = 2560 ; height = 1920;
+            }
             mParameters.setPictureSize(width, height);
             mDimension.picture_width = width;
             mDimension.picture_height = height;

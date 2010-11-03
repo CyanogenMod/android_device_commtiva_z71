@@ -102,8 +102,8 @@ typedef struct {
 	unsigned short display_height;
 	unsigned short orig_picture_dx;
 	unsigned short orig_picture_dy;
-	unsigned short ui_thumbnail_width;
 	unsigned short ui_thumbnail_height;
+	unsigned short ui_thumbnail_width;
 	unsigned short thumbnail_width;
 	unsigned short thumbnail_height;
 	unsigned short raw_picture_height;
