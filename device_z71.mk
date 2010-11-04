@@ -10,6 +10,7 @@
 # Wellcom A88
 # Cincinnati Bell Blaze
 # Spice Mi-300
+# Nexian A-890 Journey
 #
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
