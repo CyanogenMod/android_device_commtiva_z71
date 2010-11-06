@@ -1,5 +1,7 @@
 #!/bin/sh
 
+mkdir -p ../../../vendor/commtiva/z71/proprietary
+
 DIRS="
 bin
 etc/firmware
@@ -8,7 +10,7 @@ lib/hw
 "
 
 for DIR in $DIRS; do
-	mkdir -p proprietary/$DIR
+	mkdir -p ../../../vendor/commtiva/z71/proprietary/$DIR
 done
 
 FILES="
@@ -84,6 +86,6 @@ lib/libsensor_yamaha.so
 "
 
 for FILE in $FILES; do
-	adb pull system/$FILE proprietary/$FILE
+	adb pull system/$FILE ../../../vendor/commtiva/z71/proprietary/$FILE
 done
 
