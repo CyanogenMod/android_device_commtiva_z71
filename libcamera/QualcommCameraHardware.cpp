@@ -1098,6 +1098,7 @@ void QualcommCameraHardware::initDefaultParameters()
 
     mParameters.set("luma-adaptation", "3");
     mParameters.set("zoom-supported", "true");
+    mParameters.set("zoom-ratios", "100,200,300,400,500,600");
     mParameters.set("max-zoom", MAX_ZOOM_LEVEL);
     mParameters.set("zoom", 0);
     mParameters.set(CameraParameters::KEY_PICTURE_FORMAT,
