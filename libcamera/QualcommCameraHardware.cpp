@@ -929,6 +929,9 @@ void QualcommCameraHardware::filterPreviewSizes(){
         }
     }
 
+    if (!strcmp(mSensorInfo.name, "ov5642"))
+        boardMask = 0xff;
+
     int bitMask = boardMask & sensorType->bitMask;
     if(bitMask){
         unsigned int mask = 1<<(PREVIEW_SIZE_COUNT-1);
