@@ -1076,6 +1076,26 @@ void QualcommCameraHardware::initDefaultParameters()
     mParameters.set(CameraParameters::KEY_MAX_SATURATION,
             CAMERA_MAX_SATURATION);
 
+    mParameters.set("sharpness-max",
+            CAMERA_MAX_SHARPNESS);
+    mParameters.set("sharpness-def",
+            CAMERA_DEF_SHARPNESS);
+    mParameters.set("contrast-max",
+            CAMERA_MAX_CONTRAST);
+    mParameters.set("contrast-def",
+            CAMERA_DEF_CONTRAST);
+    mParameters.set("saturation-max",
+            CAMERA_MAX_SATURATION);
+    mParameters.set("saturation-def",
+            CAMERA_DEF_SATURATION);
+
+    mParameters.set(CameraParameters::KEY_MAX_EXPOSURE_COMPENSATION,
+            CAMERA_MAX_EXPOSURE_COMPENSATION);
+    mParameters.set(CameraParameters::KEY_MIN_EXPOSURE_COMPENSATION,
+            CAMERA_MIN_EXPOSURE_COMPENSATION);
+    mParameters.set(CameraParameters::KEY_EXPOSURE_COMPENSATION_STEP,
+            CAMERA_EXPOSURE_COMPENSATION_STEP);
+
     mParameters.set("luma-adaptation", "3");
     mParameters.set("zoom-supported", "true");
     mParameters.set("max-zoom", MAX_ZOOM_LEVEL);
@@ -1089,6 +1109,8 @@ void QualcommCameraHardware::initDefaultParameters()
                     CAMERA_DEF_CONTRAST);
     mParameters.set(CameraParameters::KEY_SATURATION,
                     CAMERA_DEF_SATURATION);
+    mParameters.set(CameraParameters::KEY_EXPOSURE_COMPENSATION,
+                    CAMERA_DEF_EXPOSURE_COMPENSATION);
 
     mParameters.set(CameraParameters::KEY_ISO_MODE,
                     CameraParameters::ISO_AUTO);
@@ -3008,6 +3030,7 @@ status_t QualcommCameraHardware::setParameters(const CameraParameters& params)
     if ((rc = setFocusMode(params)))    final_rc = rc;
     if ((rc = setOrientation(params)))  final_rc = rc;
     if ((rc = setBrightness(params)))   final_rc = rc;
+    if ((rc = setExposureCompensation(params)))   final_rc = rc;
     if ((rc = setLensshadeValue(params)))  final_rc = rc;
     if ((rc = setISOValue(params)))  final_rc = rc;
     if ((rc = setPictureFormat(params))) final_rc = rc;
@@ -3935,7 +3958,7 @@ status_t QualcommCameraHardware::setAutoExposure(const CameraParameters& params)
 
 status_t QualcommCameraHardware::setSharpness(const CameraParameters& params)
 {
-    if(!strcmp(sensorType->name, "2mp") || !strcmp(mSensorInfo.name, "ov5642")) {
+    if(!strcmp(sensorType->name, "2mp")) {
         LOGE("Sharpness not supported for this sensor");
         return NO_ERROR;
     }
@@ -3953,7 +3976,7 @@ status_t QualcommCameraHardware::setSharpness(const CameraParameters& params)
 
 status_t QualcommCameraHardware::setContrast(const CameraParameters& params)
 {
-    if(!strcmp(sensorType->name, "2mp") || !strcmp(mSensorInfo.name, "ov5642")) {
+    if(!strcmp(sensorType->name, "2mp")) {
         LOGE("Contrast not supported for this sensor");
         return NO_ERROR;
     }
@@ -3971,7 +3994,7 @@ status_t QualcommCameraHardware::setContrast(const CameraParameters& params)
 
 status_t QualcommCameraHardware::setSaturation(const CameraParameters& params)
 {
-    if(!strcmp(sensorType->name, "2mp") || !strcmp(mSensorInfo.name, "ov5642")) {
+    if(!strcmp(sensorType->name, "2mp")) {
         LOGE("Saturation not supported for this sensor");
         return NO_ERROR;
     }
@@ -4011,6 +4034,18 @@ status_t QualcommCameraHardware::setBrightness(const CameraParameters& params) {
         } else {
             return NO_ERROR;
         }
+}
+
+status_t QualcommCameraHardware::setExposureCompensation(const CameraParameters& params) {
+        int expcomp = params.getInt("exposure-compensation");
+
+	    mParameters.set(CameraParameters::KEY_EXPOSURE_COMPENSATION, expcomp);
+
+        expcomp+=2;
+        bool ret = native_set_parm(CAMERA_SET_PARM_EXPOSURE_COMPENSATION, sizeof(expcomp),
+                                       (void *)&expcomp);
+
+        return ret ? NO_ERROR : UNKNOWN_ERROR;
 }
 
 status_t QualcommCameraHardware::setWhiteBalance(const CameraParameters& params)

@@ -60,14 +60,18 @@ struct board_property{
 #define FALSE 0
 
 #define CAMERA_MIN_CONTRAST 0
-#define CAMERA_MAX_CONTRAST 255
+#define CAMERA_MAX_CONTRAST 4
 #define CAMERA_MIN_SHARPNESS 0
-#define CAMERA_MAX_SHARPNESS 255
+#define CAMERA_MIN_EXPOSURE_COMPENSATION 0
+#define CAMERA_MAX_SHARPNESS 4
 #define CAMERA_MIN_SATURATION 0
-#define CAMERA_MAX_SATURATION 255
-#define CAMERA_DEF_SHARPNESS 30
-#define CAMERA_DEF_CONTRAST 8
-#define CAMERA_DEF_SATURATION 6
+#define CAMERA_MAX_SATURATION 4
+#define CAMERA_MAX_EXPOSURE_COMPENSATION 8
+#define CAMERA_DEF_SHARPNESS 2
+#define CAMERA_DEF_CONTRAST 3
+#define CAMERA_DEF_SATURATION 2
+#define CAMERA_DEF_EXPOSURE_COMPENSATION "2.0"
+#define CAMERA_EXPOSURE_COMPENSATION_STEP 2
 
 #define CEILING16(x) (x&0xfffffff0)
 #define PAD_TO_WORD(x) ((x&1) ? x+1 : x)
@@ -222,8 +226,8 @@ enum camera_ops {
     CAMERA_SET_PARM_SHARPNESS,
     CAMERA_SET_PARM_LUMA_ADAPTATION,
     CAMERA_SET_PARM_CONTRAST,
-    CAMERA_SET_PARM_BRIGHTNESS,
     CAMERA_SET_PARM_EXPOSURE_COMPENSATION,
+    CAMERA_SET_PARM_BRIGHTNESS,
     CAMERA_SET_PARM_FOCUS_RECT,
     CAMERA_SET_PARM_HUE,
     CAMERA_SET_PARM_SATURATION,
@@ -532,6 +536,7 @@ private:
     status_t setZoom(const CameraParameters& params);
     status_t setFocusMode(const CameraParameters& params);
     status_t setBrightness(const CameraParameters& params);
+    status_t setExposureCompensation(const CameraParameters& params);
     status_t setOrientation(const CameraParameters& params);
     status_t setLensshadeValue(const CameraParameters& params);
     status_t setISOValue(const CameraParameters& params);
