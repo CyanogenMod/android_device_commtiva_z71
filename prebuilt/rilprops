@@ -1,0 +1,13 @@
+#!/system/bin/sh
+
+## Set some properties that should be configured by RIL, but aren't
+
+NUMOP=`getprop gsm.operator.numeric`
+OPERATOR=`grep $NUMOP /system/etc/spn-conf.xml | sed -e 's/.*spn="\(.*\)".*/\1/g'`
+setprop gsm.operator.alpha $OPERATOR
+
+NUMOP=`getprop gsm.sim.operator.numeric`
+OPERATOR=`grep $NUMOP /system/etc/spn-conf.xml | sed -e 's/.*spn="\(.*\)".*/\1/g'`
+setprop gsm.sim.operator.alpha $OPERATOR
+
+setprop gsm.version.baseband `cat /proc/baseband`
