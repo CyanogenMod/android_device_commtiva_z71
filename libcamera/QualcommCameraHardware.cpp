@@ -606,7 +606,7 @@ struct SensorType {
 
 static SensorType sensorTypes[] = {
         { "5mp", 2608, 1960, true,  2592, 1944,0x00000fff },
-        { "5mp", 5184, 1944, true,  2592, 1944,0x00000fff },
+        { "5mp", 5184, 1944, false,  2592, 1944,0x00000fff },
         { "3mp", 2064, 1544, false, 2048, 1536,0x000007ff },
         { "2mp", 3200, 1200, false, 1600, 1200,0x000007ff } };
 
@@ -930,7 +930,7 @@ void QualcommCameraHardware::filterPreviewSizes(){
     }
 
     if (!strcmp(mSensorInfo.name, "ov5642"))
-        boardMask = 0xff;
+        boardMask = 0x4ff;
 
     int bitMask = boardMask & sensorType->bitMask;
     if(bitMask){
@@ -1122,8 +1122,16 @@ void QualcommCameraHardware::initDefaultParameters()
                     CameraParameters::LENSSHADE_ENABLE);
     mParameters.set(CameraParameters::KEY_SUPPORTED_ISO_MODES,
                     iso_values);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_LENSSHADE_MODES,
+
+    if( (!strcmp(sensorType->name, "2mp")) ||
+        (!strcmp(mSensorInfo.name, "vx6953")) ||
+		(!strcmp(mSensorInfo.name, "ov5642")) ||
+		(!strcmp(mSensorInfo.name, "VX6953")) ) {
+        LOGI("Parameter Rolloff is not supported for this sensor");
+    } else {
+        mParameters.set(CameraParameters::KEY_SUPPORTED_LENSSHADE_MODES,
                     lensshade_values);
+    }
 
     if (setParameters(mParameters) != NO_ERROR) {
         LOGE("Failed to set default parameters?!");
