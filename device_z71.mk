@@ -140,6 +140,8 @@ PRODUCT_COPY_FILES += \
     vendor/commtiva/z71/proprietary/bin/sensorserver_yamaha:system/bin/sensorserver_yamaha \
     device/commtiva/z71/prebuilt/sensordaemon:system/bin/sensordaemon \
     vendor/commtiva/z71/proprietary/lib/hw/sensors.qcom.so:system/lib/hw/sensors.qcom.so \
+    vendor/commtiva/z71/proprietary/bin/gsensorcalibration:system/bin/gsensorcalibration \
+    device/commtiva/z71/prebuilt/SensorCalibration.apk:system/app/SensorCalibration.apk \
     device/commtiva/z71/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
     device/commtiva/z71/AudioFilter.csv:system/etc/AudioFilter.csv \
     vendor/commtiva/z71/proprietary/lib/liba2dp.so:system/lib/liba2dp.so \

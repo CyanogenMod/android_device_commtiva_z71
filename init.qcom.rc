@@ -17,6 +17,8 @@ on nand
     symlink /dev/lightsensor /dev/cm3602_alsps
 	## Needed because sensor_server runs as system
 	chmod 666 /dev/compass
+	## Calibration is done by a userspace app
+	chmod 666 /sys/module/fihsensor/parameters/gsensorCalibStart
 
 on early-init
     exec /sbin/hwprops
