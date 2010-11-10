@@ -22,10 +22,14 @@ $(call inherit-product-if-exists, vendor/commtiva/z71/z71-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/commtiva/z71/overlay
 
+# HAL libs
 PRODUCT_PACKAGES += \
     lights.z71 \
     copybit.z71
 
+# Extra apps
+PRODUCT_PACKAGES += \
+	Torch
 
 ifeq ($(TARGET_PREBUILT_KERNEL),)
     LOCAL_KERNEL := device/commtiva/z71/kernel
