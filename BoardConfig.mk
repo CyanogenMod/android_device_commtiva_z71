@@ -40,3 +40,4 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 
 TARGET_PREBUILT_KERNEL := device/commtiva/z71/kernel
 
+BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/commtiva/z71/recovery_ui.c
