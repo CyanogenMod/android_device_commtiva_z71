@@ -19,9 +19,6 @@ on nand
 on early-init
     exec /sbin/hwprops
 
-on property:gsm.operator.alpha=Unknown
-	start ril-fix
-
 on property:dev.bootcomplete=1
 #+++FIH_misty enable keypad interrupt until boot complete
     chmod 0666 /sys/module/7x27_kybd/parameters/EnableKeyIntrrupt
@@ -102,9 +99,5 @@ service sensor-daemon /system/bin/sensorserver_yamaha
     group root 
 
 service sensor-fix /system/bin/sensordaemon
-    disabled
-    oneshot
-
-service ril-fix /system/bin/rilprops
     disabled
     oneshot

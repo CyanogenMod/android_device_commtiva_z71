@@ -59,11 +59,10 @@ PRODUCT_COPY_FILES += \
 
 ## RIL related stuff
 PRODUCT_COPY_FILES += \
-    device/commtiva/z71/prebuilt/rilprops:system/bin/rilprops \
+    device/commtiva/z71/prebuilt/rild:system/bin/rild \
     device/commtiva/z71/spn-conf.xml:system/etc/spn-conf.xml \
     vendor/commtiva/z71/proprietary/bin/qmuxd:system/bin/qmuxd \
     vendor/commtiva/z71/proprietary/lib/libril.so:system/lib/libril.so \
-    vendor/commtiva/z71/proprietary/bin/rild:system/bin/rild \
     vendor/commtiva/z71/proprietary/lib/liboncrpc.so:system/lib/liboncrpc.so \
     vendor/commtiva/z71/proprietary/lib/libmmgsdilib.so:system/lib/libmmgsdilib.so \
     vendor/commtiva/z71/proprietary/lib/libgsdi_exp.so:system/lib/libgsdi_exp.so \

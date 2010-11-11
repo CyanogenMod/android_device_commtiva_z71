@@ -16,7 +16,6 @@ done
 FILES="
 bin/hci_qcomm_init
 bin/qmuxd
-bin/rild
 bin/sensorserver_yamaha
 bin/updateSensorNV
 bin/gsensorcalibration
