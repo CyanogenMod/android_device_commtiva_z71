@@ -19,6 +19,7 @@ bin/qmuxd
 bin/rild
 bin/sensorserver_yamaha
 bin/updateSensorNV
+bin/gsensorcalibration
 
 etc/firmware/yamato_pfp.fw
 etc/firmware/yamato_pm4.fw
