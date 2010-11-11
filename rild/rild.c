@@ -97,6 +97,84 @@ char *getNextValueFromAtLine(char **atresponse) {
 	return value;
 }
 
+
+void getNetworksFromModem(char **response) {
+	struct termios  ios;
+	char sync_buf[256];
+	char *readbuf = sync_buf;
+	char *states[4] = {"unknown","available","current","forbidden"}; 
+	int seen[16] = {0,}; /* Max 16 operators */
+	int old_flags, i, networkCount=0;
+	int fd=open("/dev/smd0",O_RDWR);
+
+	if (fd<=0) {
+		return;
+	}
+	tcgetattr( fd, &ios );
+	ios.c_lflag = 0;
+	tcsetattr( fd, TCSANOW, &ios );
+	old_flags = fcntl(fd, F_GETFL, 0);
+    fcntl(fd, F_SETFL, old_flags | O_NONBLOCK);
+
+	write(fd,"AT+COPS=?\r",10);
+	sleep(1);	
+
+	if (read(fd,sync_buf,sizeof(sync_buf))) {
+		sync_buf[255]='\0';
+		char *readbuf = sync_buf;
+		while (strlen(readbuf)) {
+			char *output[4];
+			while (*readbuf != '(' && *readbuf !='\0') {
+				readbuf++;
+			}
+			output[0]=++readbuf;
+			while (*readbuf != ',') {
+				readbuf++;
+			}
+			*readbuf='\0'; readbuf+=2;
+			output[1]=readbuf;
+			while (*readbuf != ',') {
+				readbuf++;
+			}
+			*--readbuf='\0'; readbuf+=3;
+			output[2]=readbuf;
+			while (*readbuf != ',') {
+				readbuf++;
+			}
+			*--readbuf='\0'; readbuf+=3;
+			output[3]=readbuf;
+			while (*readbuf != ',') {
+				readbuf++;
+			}
+			*--readbuf='\0'; 
+			while (*readbuf != ')') {
+				readbuf++;
+			}
+			*readbuf++='\0';
+
+			int numericOperator = atoi(output[3]);
+			for (i=0; i<16 && seen[i]!=0; i++) {
+				if (seen[i] == numericOperator)
+					goto skipop;
+			}
+			seen[networkCount] = numericOperator;
+
+			response[(networkCount*4)+0]=strdup(output[1]);
+			response[(networkCount*4)+1]=strdup(output[2]);
+			response[(networkCount*4)+2]=strdup(output[3]);
+			response[(networkCount*4)+3]=strdup(states[atoi(output[0])]);
+		
+			networkCount++;
+skipop:	
+			if (!strncmp(readbuf,",,",2)) {
+				break;
+			}
+	
+		}
+	}
+	close(fd);
+}
+
 void getOperatorFromModem(char **p_cur) {
     struct termios  ios;
     char sync_buf[256];
@@ -114,7 +192,7 @@ void getOperatorFromModem(char **p_cur) {
     ios.c_lflag = 0;
     tcsetattr( fd, TCSANOW, &ios );
 
-	write(fd,"AT+COPS=3,0;+COPS?;+COPS=3,1;+COPS?\r",53);
+	write(fd,"AT+COPS=3,0;+COPS?;+COPS=3,1;+COPS?\r",36);
 	sleep(1);
     read(fd,sync_buf,sizeof(sync_buf));
     if (strlen(sync_buf)) {
@@ -145,6 +223,8 @@ RIL_InterceptOnRequestComplete(RIL_Token t, RIL_Errno e, void *response, size_t 
 		if (!strncmp(p_cur[0],"Unknown",7)) {
 			getOperatorFromModem(p_cur);
 		}
+	} else if (pRI->pCI->requestNumber == RIL_REQUEST_QUERY_AVAILABLE_NETWORKS) {
+		getNetworksFromModem((char **)response);
 	} else if (pRI->pCI->requestNumber == RIL_REQUEST_BASEBAND_VERSION) {
 		char baseband[PROPERTY_VALUE_MAX];
 
