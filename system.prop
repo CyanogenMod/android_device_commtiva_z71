@@ -19,3 +19,7 @@ ro.opengles.version = 131072
 
 # Wifi interface
 wifi.interface=wlan0
+
+## QC RIL doesn't replay call rings
+ro.telephony.call_ring.multiple=false
+ro.telephony.call_ring.delay=5000
