@@ -117,7 +117,8 @@ PRODUCT_COPY_FILES += \
 ## GPS - this is actually the standard libloc_api, but with the RPC program
 #       version changed from 10001 to 40001
 PRODUCT_COPY_FILES += \
-    device/commtiva/z71/prebuilt/libloc_api.so:system/lib/libloc_api.so
+    device/commtiva/z71/prebuilt/libloc_api.so:system/lib/libloc_api.so \
+    device/commtiva/z71/prebuilt/librpc.so:system/lib/librpc.so
 
 ## Camera proprietaries
 PRODUCT_COPY_FILES += \
