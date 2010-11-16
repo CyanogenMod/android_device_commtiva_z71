@@ -69,6 +69,7 @@ on boot
 
 on property:init.svc.bluetoothd=running
     write /sys/devices/virtual/bluetooth/hci0/idle_timeout 7000
+    start abtfilt
 
 service hciattach /system/bin/sh /system/bin/init.qcom.bt.sh
     user bluetooth
