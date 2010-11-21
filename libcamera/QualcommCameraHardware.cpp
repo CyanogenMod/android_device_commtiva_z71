@@ -202,7 +202,7 @@ static const camera_size_type picture_sizes[] = {
     { 2592, 1944 }, // 5MP
     { 2560, 1920 }, // 5MP (slightly reduced)
     { 2048, 1536 }, // 3MP QXGA
-    { 1920, 1080 }, //HD1080
+    //{ 1920, 1080 }, //HD1080
     { 1600, 1200 }, // 2MP UXGA
     { 1280, 768 }, //WXGA
     { 1280, 720 }, //HD720
