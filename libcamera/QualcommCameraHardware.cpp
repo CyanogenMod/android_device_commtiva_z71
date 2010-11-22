@@ -202,7 +202,7 @@ static const camera_size_type picture_sizes[] = {
     { 2592, 1944 }, // 5MP
     { 2560, 1920 }, // 5MP (slightly reduced)
     { 2048, 1536 }, // 3MP QXGA
-    { 1920, 1080 }, //HD1080
+    //{ 1920, 1080 }, //HD1080
     { 1600, 1200 }, // 2MP UXGA
     { 1280, 768 }, //WXGA
     { 1280, 720 }, //HD720
@@ -3051,7 +3051,9 @@ status_t QualcommCameraHardware::setParameters(const CameraParameters& params)
     if ((rc = setSaturation(params)))   final_rc = rc;
 
     LOGV("setParameters: X");
-    return final_rc;
+    //return final_rc;
+    /* Just let whatever passed go through */
+    return NO_ERROR;
 }
 
 CameraParameters QualcommCameraHardware::getParameters() const
