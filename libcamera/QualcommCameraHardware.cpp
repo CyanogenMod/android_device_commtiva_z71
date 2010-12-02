@@ -1803,8 +1803,9 @@ void QualcommCameraHardware::setGpsParameters() {
     str = NULL;
     str = mParameters.get(CameraParameters::KEY_GPS_ALTITUDE);
     if(str != NULL) {
-        int value = atoi(str);
-        rat_t alt_value = {value, 1000};
+        double value = atoi(str);
+        uint32_t value_meter = value * 1000;
+        rat_t alt_value = {value_meter, 1000};
         memcpy(&altitude, &alt_value, sizeof(altitude));
         addExifTag(EXIFTAGID_GPS_ALTITUDE, EXIF_RATIONAL, 1,
                     1, (void *)&altitude);
