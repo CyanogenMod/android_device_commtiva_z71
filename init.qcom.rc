@@ -70,6 +70,9 @@ on boot
     chown system camera /sys/devices/platform/flashlight.0/leds/flashlight/brightness
     chmod 0660 /sys/devices/platform/flashlight.0/leds/flashlight/brightness
 
+	# Red LED blink
+	chown system system /sys/class/leds/red/blink
+
 on property:init.svc.bluetoothd=running
     write /sys/devices/virtual/bluetooth/hci0/idle_timeout 7000
     start abtfilt
