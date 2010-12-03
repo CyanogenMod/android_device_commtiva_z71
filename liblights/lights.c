@@ -61,7 +61,7 @@ char const*const BLUE_LED_FILE
         = "/sys/class/leds/blue/brightness";
 
 char const*const AMBER_LED_FILE
-        = "/sys/class/leds/amber/brightness";
+        = "/sys/class/leds/red/brightness";
 
 char const*const LCD_FILE
         = "/proc/driver/max8831";
@@ -73,10 +73,10 @@ char const*const RED_PWM_FILE
         = "/sys/class/leds/red/device/grppwm";
 
 char const*const RED_BLINK_FILE
-        = "/sys/bus/i2c/devices/0-0045/blink";
+        = "/sys/class/leds/red/blink";
 
 char const*const AMBER_BLINK_FILE
-        = "/sys/class/leds/amber/blink";
+        = "/sys/class/leds/red/blink";
 
 char const*const KEYBOARD_FILE
         = "/sys/class/leds/keyboard-backlight/brightness";
@@ -327,6 +327,8 @@ set_speaker_light_locked(struct light_device_t* dev,
         }
         write_int(RED_BLINK_FILE, blink);
     } else {
+        if (blink) 
+              write_int(AMBER_LED_FILE, 0);
         write_int(AMBER_BLINK_FILE, blink);
     }
 
@@ -361,14 +363,9 @@ static int
 set_light_notifications(struct light_device_t* dev,
         struct light_state_t const* state)
 {
+    int on = is_lit(state);
     pthread_mutex_lock(&g_lock);
-    g_notification = *state;
-    LOGV("set_light_notifications g_trackball=%d color=0x%08x",
-            g_trackball, state->color);
-    if (g_haveTrackballLight) {
-        handle_trackball_light_locked(dev);
-    }
-    handle_speaker_battery_locked(dev);
+    write_int("/sys/bus/i2c/devices/0-0045/powerbtn", on ? 1 : 0);
     pthread_mutex_unlock(&g_lock);
     return 0;
 }
