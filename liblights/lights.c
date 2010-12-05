@@ -325,7 +325,12 @@ set_light_battery(struct light_device_t* dev,
         struct light_state_t const* state)
 {
     pthread_mutex_lock(&g_lock);
+
     g_battery = *state;
+
+    /* LEDs on the Z71 are separate, RED+GREEN != amber */
+    if (g_battery.color && g_battery.color == 0xFFFFFF00)
+        g_battery.color = 0xFFFF0000;
     if (g_haveTrackballLight) {
         set_front_light_locked(dev, state);
     }
