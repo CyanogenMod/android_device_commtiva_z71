@@ -27,7 +27,7 @@ BOARD_GPS_LIBRARIES := libloc_api
 
 TARGET_OTA_ASSERT_DEVICE := z71
 
-BOARD_KERNEL_CMDLINE := 
+BOARD_KERNEL_CMDLINE := mem=210M console=null androidboot.hardware=qcom no_console_suspend
 BOARD_KERNEL_BASE := 0x12e00000
 BOARD_PAGE_SIZE := 0x00000800
 
