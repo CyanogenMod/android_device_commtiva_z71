@@ -2858,12 +2858,12 @@ RIL_onRequestComplete(RIL_Token t, RIL_Errno e, void *response, size_t responsel
     appendPrintBuf("[%04d]< %s",
         pRI->token, requestToString(pRI->pCI->requestNumber));
 
-    if (pRI->pCI->requestNumber == RIL_REQUEST_OPERATOR) {
+    if (responselen && pRI->pCI->requestNumber == RIL_REQUEST_OPERATOR) {
         char **p_cur = (char **) response;
         if (!strncmp(p_cur[0],"Unknown",7)) {
             getOperatorFromModem(p_cur);
         }
-    } else if (pRI->pCI->requestNumber == RIL_REQUEST_QUERY_AVAILABLE_NETWORKS) {
+    } else if (responselen && pRI->pCI->requestNumber == RIL_REQUEST_QUERY_AVAILABLE_NETWORKS) {
         getNetworksFromModem((char **)response);
     } else if (pRI->pCI->requestNumber == RIL_REQUEST_BASEBAND_VERSION) {
         char baseband[PROPERTY_VALUE_MAX];
