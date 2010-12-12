@@ -38,6 +38,8 @@
 
     <bool name="config_automatic_brightness_available">true</bool>
 
+	<integer name="config_lightSensorWarmupTime">1500</integer>
+
     <!-- Array of light sensor LUX values to define our levels for auto backlight brightness support.
          The N entries of this array define N + 1 zones as follows:
 
@@ -49,21 +51,21 @@
 
          Must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLevels">
-        <item>8</item>
-        <item>16</item>
-        <item>24</item>
-        <item>32</item>
+        <item>1</item>
+        <item>5</item>
+        <item>11</item>
+        <item>15</item>
     </integer-array>
     <!-- Array of output values for LCD backlight corresponding to the LUX values
          in the config_autoBrightnessLevels array.  This array should have size one greater
          than the size of the config_autoBrightnessLevels array.
     -->
     <integer-array name="config_autoBrightnessLcdBacklightValues">
-        <item>51</item>
-        <item>102</item>
-        <item>153</item>
-        <item>204</item>
-        <item>255</item>
+        <item>25</item>
+        <item>55</item>
+        <item>70</item>
+        <item>70</item>
+        <item>250</item>
     </integer-array>
 
     <!-- Array of output values for button backlight corresponding to the LUX values
@@ -71,6 +73,19 @@
          than the size of the config_autoBrightnessLevels array.
     -->
     <integer-array name="config_autoBrightnessButtonBacklightValues">
+        <item>255</item>
+        <item>255</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+    </integer-array>
+
+    <!-- Array of output values for keyboard backlight corresponding to the LUX values
+         in the config_autoBrightnessLevels array.  This array should have size one greater
+         than the size of the config_autoBrightnessLevels array.
+         This must be overridden in platform specific overlays -->
+
+    <integer-array name="config_autoBrightnessKeyboardBacklightValues">
         <item>255</item>
         <item>255</item>
         <item>0</item>
