@@ -1847,14 +1847,16 @@ bool QualcommCameraHardware::native_jpeg_encode(void)
     //jpeg_set_location();
 
     //set TimeStamp
-    const char *str = mParameters.get(CameraParameters::KEY_EXIF_DATETIME);
-	/* YYYY:MM:DD HH:MM:SS */
-    if(str != NULL) {
-      strncpy(dateTime, str, 19);
-      dateTime[19] = '\0';
-      addExifTag(EXIFTAGID_EXIF_DATE_TIME_ORIGINAL, EXIF_ASCII,
+	time_t now;
+	struct tm * curtime;
+
+	time(&now);
+    curtime = localtime(&now);
+    strftime(dateTime,20,"%Y:%m:%d %H:%M:%S",curtime);
+    dateTime[19] = '\0';
+    addExifTag(EXIFTAGID_EXIF_DATE_TIME_ORIGINAL, EXIF_ASCII,
                   20, 1, (void *)dateTime);
-    }
+
     if (!LINK_jpeg_encoder_encode(&mDimension,
                                   (uint8_t *)mThumbnailHeap->mHeap->base(),
                                   mThumbnailHeap->mHeap->getHeapID(),
