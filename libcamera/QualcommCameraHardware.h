@@ -295,11 +295,6 @@ typedef enum {
 	CAMERA_CB_MAX,
 } camera_cb_type;
 
-typedef struct {
-	unsigned int val;
-	unsigned int otherval;
-} rat_t;
-
 struct cam_frame_start_parms {
 	unsigned int unknown;
 	struct msm_frame frame;
@@ -316,23 +311,38 @@ enum {
 #define EXIF_ASCII 2
 #define EXIF_BYTE 1
 
+typedef struct {
+	unsigned int val;
+	unsigned int otherval;
+} rat_t;
+
+
+typedef struct {
+	char * _ascii;
+	rat_t * _rats;
+	rat_t  _rat;
+	uint8_t _byte;
+} exif_tag_data_t;
+
 typedef unsigned int exif_tag_type_t;
 typedef struct {
-	//24 bytes = 6 ints
 	exif_tag_type_t type;
-	uint32_t count;
 	uint32_t copy;
-	uint32_t junk1;
-	uint32_t junk2;
-	uint32_t junk3;
+	uint32_t count;
+	exif_tag_data_t data;
 } exif_tag_entry_t;
 
 typedef struct {
-	exif_tag_id_t tagid;
+	exif_tag_id_t tag_id;
 	exif_tag_entry_t tag_entry;
 } exif_tags_info_t;
 
-
+/* EXIF tag IDs */
+#define EXIFTAGID_EXIF_CAMERA_MAKER 0x21010F
+#define EXIFTAGID_EXIF_CAMERA_MODEL 0x210110
+#define EXIFTAGID_EXIF_DATE_TIME_ORIGINAL 0x3A9003
+#define EXIFTAGID_EXIF_DATE_TIME 0x3B9004
+/* End of proprietary stuff */
 namespace android {
 
 class QualcommCameraHardware : public CameraHardwareInterface {
