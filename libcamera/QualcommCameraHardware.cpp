@@ -1695,7 +1695,6 @@ static rat_t altitude;
 static void addExifTag(exif_tag_id_t tagid, exif_tag_type_t type,
                         uint32_t count, uint8_t copy, void *data) {
 
-#if 0
     if(exif_table_numEntries == MAX_EXIF_TABLE_ENTRIES) {
         LOGE("Number of entries exceeded limit");
         return;
@@ -1717,7 +1716,6 @@ static void addExifTag(exif_tag_id_t tagid, exif_tag_type_t type,
 
     // Increase number of entries
     exif_table_numEntries++;
-#endif
     return;
 }
 
@@ -1850,19 +1848,19 @@ bool QualcommCameraHardware::native_jpeg_encode(void)
 
     //set TimeStamp
     const char *str = mParameters.get(CameraParameters::KEY_EXIF_DATETIME);
+	/* YYYY:MM:DD HH:MM:SS */
     if(str != NULL) {
       strncpy(dateTime, str, 19);
       dateTime[19] = '\0';
-	/*
       addExifTag(EXIFTAGID_EXIF_DATE_TIME_ORIGINAL, EXIF_ASCII,
-                  20, 1, (void *)dateTime);*/
+                  20, 1, (void *)dateTime);
     }
     if (!LINK_jpeg_encoder_encode(&mDimension,
                                   (uint8_t *)mThumbnailHeap->mHeap->base(),
                                   mThumbnailHeap->mHeap->getHeapID(),
                                   (uint8_t *)mRawHeap->mHeap->base(),
                                   mRawHeap->mHeap->getHeapID(),
-                                  &mCrop, exif_data, 0, /*exif_table_numEntries,*/
+                                  &mCrop, exif_data, exif_table_numEntries,
                                   jpegPadding/2)) {
         LOGE("native_jpeg_encode: jpeg_encoder_encode failed.");
         return false;
