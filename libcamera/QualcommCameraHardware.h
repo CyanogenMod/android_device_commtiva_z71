@@ -1,6 +1,7 @@
 /*
 ** Copyright 2008, Google Inc.
 ** Copyright (c) 2009, Code Aurora Forum. All rights reserved.
+** Copyright (c) 2010, Ricardo Cerqueira
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -13,6 +14,14 @@
 ** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ** See the License for the specific language governing permissions and
 ** limitations under the License.
+**
+** NOTICE - (RC)
+**
+** All alterations done to this file to add support for the Z71 terminal
+** are intended for use with CyanogenMod. This includes all the support
+** for ov5642, and the reverse engineered bits like ioctls and EXIF 
+** referred to below as "Values originally from proprietary headers")
+** Please do not change the EXIF header without asking me first.
 */
 
 #ifndef ANDROID_HARDWARE_QUALCOMM_CAMERA_HARDWARE_H
@@ -52,7 +61,7 @@ struct board_property{
     unsigned int previewSizeMask;
 };
 
-/* Values from proprietary headers */
+/* Values originally in proprietary headers */
 
 #define MSM_CAMERA_CONTROL "/dev/msm_camera/control0"
 
@@ -302,28 +311,25 @@ struct cam_frame_start_parms {
 };
 
 typedef unsigned int exif_tag_id_t;
-enum {
-	EXIFTAGID_GPS_LATITUDE	= 0x20002,
-	EXIFTAGID_GPS_LONGITUDE	= 0x40004,
-};
 
 #define EXIF_RATIONAL 5
 #define EXIF_ASCII 2
 #define EXIF_BYTE 1
 
 typedef struct {
-	unsigned int val;
+	int val;
 	unsigned int otherval;
 } rat_t;
 
 
 typedef struct {
-	char * _ascii;
+	char * _ascii; /* At byte 16 relative to exif_tag_entry_t */
 	rat_t * _rats;
-	rat_t  _rat;
-	uint8_t _byte;
+	/*rat_t  _rat;
+	uint8_t _byte;*/
 } exif_tag_data_t;
 
+/* The entire exif_tag_entry_t struct must be 24 bytes in length */
 typedef unsigned int exif_tag_type_t;
 typedef struct {
 	exif_tag_type_t type;
@@ -338,11 +344,18 @@ typedef struct {
 } exif_tags_info_t;
 
 /* EXIF tag IDs */
+#define EXIFTAGID_GPS_LATITUDE 0x20002
+#define EXIFTAGID_GPS_LATITUDE_REF 0x10001
+#define EXIFTAGID_GPS_LONGITUDE 0x40004
+#define EXIFTAGID_GPS_LONGITUDE_REF 0x30003
+#define EXIFTAGID_GPS_ALTITUDE 0x60006
+#define EXIFTAGID_GPS_ALTITUDE_REF 0x50005
 #define EXIFTAGID_EXIF_CAMERA_MAKER 0x21010F
 #define EXIFTAGID_EXIF_CAMERA_MODEL 0x220110
 #define EXIFTAGID_EXIF_DATE_TIME_ORIGINAL 0x3A9003
 #define EXIFTAGID_EXIF_DATE_TIME 0x3B9004
-/* End of proprietary stuff */
+/* End of values originally in proprietary headers */
+
 namespace android {
 
 class QualcommCameraHardware : public CameraHardwareInterface {

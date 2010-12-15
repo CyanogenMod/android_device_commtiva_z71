@@ -1,6 +1,7 @@
 /*
 ** Copyright 2008, Google Inc.
 ** Copyright (c) 2009, Code Aurora Forum. All rights reserved.
+** Copyright (c) 2010, Ricardo Cerqueira
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -13,6 +14,13 @@
 ** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ** See the License for the specific language governing permissions and
 ** limitations under the License.
+**
+** NOTICE - (RC)
+**
+** All alterations done to this file to add support for the Z71 terminal
+** are intended for use with CyanogenMod. This includes all the support
+** for ov5642, and the reverse engineered bits like ioctls and EXIF.
+** Please do not change the EXIF header without asking me first.
 */
 
 //#define LOG_NDEBUG 0
@@ -1707,12 +1715,12 @@ static void addExifTag(exif_tag_id_t tagid, exif_tag_type_t type,
 	exif_data[index].tag_entry.copy = copy;
     if((type == EXIF_RATIONAL) && (count > 1))
         exif_data[index].tag_entry.data._rats = (rat_t *)data;
-    if((type == EXIF_RATIONAL) && (count == 1))
-        exif_data[index].tag_entry.data._rat = *(rat_t *)data;
+    /*if((type == EXIF_RATIONAL) && (count == 1))
+        exif_data[index].tag_entry.data._rat = *(rat_t *)data;*/
     else if(type == EXIF_ASCII)
         exif_data[index].tag_entry.data._ascii = (char *)data;
-    else if(type == EXIF_BYTE)
-        exif_data[index].tag_entry.data._byte = *(uint8_t *)data;
+    /*else if(type == EXIF_BYTE)
+        exif_data[index].tag_entry.data._byte = *(uint8_t *)data;*/
 
     // Increase number of entries
     exif_table_numEntries++;
@@ -1745,7 +1753,6 @@ static void setLatLon(exif_tag_id_t tag, const char *latlonString) {
                        {minutes, 1},
                        {seconds, 1000} };
 
-#if 0
     if(tag == EXIFTAGID_GPS_LATITUDE) {
         memcpy(latitude, value, sizeof(latitude));
         addExifTag(EXIFTAGID_GPS_LATITUDE, EXIF_RATIONAL, 3,
@@ -1755,7 +1762,6 @@ static void setLatLon(exif_tag_id_t tag, const char *latlonString) {
         addExifTag(EXIFTAGID_GPS_LONGITUDE, EXIF_RATIONAL, 3,
                     1, (void *)longitude);
     }
-#endif
 }
 
 void QualcommCameraHardware::setGpsParameters() {
@@ -1763,7 +1769,6 @@ void QualcommCameraHardware::setGpsParameters() {
 
     //Set Latitude
     str = mParameters.get(CameraParameters::KEY_GPS_LATITUDE);
-#if 0
     if(str != NULL) {
         setLatLon(EXIFTAGID_GPS_LATITUDE, str);
         //set Latitude Ref
@@ -1809,7 +1814,6 @@ void QualcommCameraHardware::setGpsParameters() {
                         1, (void *)&ref);
     }
 
-#endif
 
 }
 
@@ -1845,6 +1849,7 @@ bool QualcommCameraHardware::native_jpeg_encode(void)
     }
 
     //jpeg_set_location();
+    setGpsParameters();
 
     //set TimeStamp
 	time_t now;
@@ -1856,6 +1861,24 @@ bool QualcommCameraHardware::native_jpeg_encode(void)
     dateTime[19] = '\0';
     addExifTag(EXIFTAGID_EXIF_DATE_TIME_ORIGINAL, EXIF_ASCII,
                   20, 1, (void *)dateTime);
+    addExifTag(EXIFTAGID_EXIF_DATE_TIME, EXIF_ASCII,
+                  20, 1, (void *)dateTime);
+
+   /* Set maker and model. Read the NOTICE before changing this */
+   char model[PROP_VALUE_MAX];
+   char maker[12];
+   int modelLen = 0;
+
+   strncpy(maker,"CyanogenMod",11);
+   maker[11] = '\0';
+   __system_property_get("ro.product.device", model);
+   modelLen=strlen(model);
+   model[modelLen] = '\0';
+
+    addExifTag(EXIFTAGID_EXIF_CAMERA_MAKER, EXIF_ASCII,
+                  12, 1, (void *)maker);
+    addExifTag(EXIFTAGID_EXIF_CAMERA_MODEL, EXIF_ASCII,
+                  modelLen, 1, (void *)model);
 
     if (!LINK_jpeg_encoder_encode(&mDimension,
                                   (uint8_t *)mThumbnailHeap->mHeap->base(),
