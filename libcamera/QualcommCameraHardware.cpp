@@ -1715,12 +1715,12 @@ static void addExifTag(exif_tag_id_t tagid, exif_tag_type_t type,
 	exif_data[index].tag_entry.copy = copy;
     if((type == EXIF_RATIONAL) && (count > 1))
         exif_data[index].tag_entry.data._rats = (rat_t *)data;
-    /*if((type == EXIF_RATIONAL) && (count == 1))
-        exif_data[index].tag_entry.data._rat = *(rat_t *)data;*/
+    if((type == EXIF_RATIONAL) && (count == 1))
+		return;
     else if(type == EXIF_ASCII)
         exif_data[index].tag_entry.data._ascii = (char *)data;
-    /*else if(type == EXIF_BYTE)
-        exif_data[index].tag_entry.data._byte = *(uint8_t *)data;*/
+    else if(type == EXIF_BYTE)
+		return;
 
     // Increase number of entries
     exif_table_numEntries++;
@@ -1780,7 +1780,8 @@ void QualcommCameraHardware::setGpsParameters() {
             addExifTag(EXIFTAGID_GPS_LATITUDE_REF, EXIF_ASCII, 2,
                         1, (void *)latref);
         }
-    }
+    } else
+		return;
 
     //set Longitude
     str = NULL;
@@ -1848,7 +1849,6 @@ bool QualcommCameraHardware::native_jpeg_encode(void)
         }
     }
 
-    //jpeg_set_location();
     setGpsParameters();
 
     //set TimeStamp
@@ -3535,23 +3535,10 @@ bool QualcommCameraHardware::recordingEnabled()
     return mCameraRunning && mDataCallbackTimestamp && (mMsgEnabled & CAMERA_MSG_VIDEO_FRAME);
 }
 
-void QualcommCameraHardware::notifyShutter(common_crop_t *crop, bool mPlayShutterSoundOnly)
+void QualcommCameraHardware::notifyShutter(common_crop_t *crop)
 {
     mShutterLock.lock();
     image_rect_type size;
-
-    if(mPlayShutterSoundOnly) {
-        /* At this point, invoke Notify Callback to play shutter sound only.
-         * We want to call notify callback again when we have the
-         * yuv picture ready. This is to reduce blanking at the time
-         * of displaying postview frame. Using ext2 to indicate whether
-         * to play shutter sound only or register the postview buffers.
-         */
-        mNotifyCallback(CAMERA_MSG_SHUTTER, 0, mPlayShutterSoundOnly,
-                            mCallbackCookie);
-        mShutterLock.unlock();
-        return;
-    }
 
     if (mShutterPending && mNotifyCallback && (mMsgEnabled & CAMERA_MSG_SHUTTER)) {
         LOGV("out2_w=%d, out2_h=%d, in2_w=%d, in2_h=%d",
@@ -3582,9 +3569,7 @@ void QualcommCameraHardware::notifyShutter(common_crop_t *crop, bool mPlayShutte
             }
         }
         /* Now, invoke Notify Callback to unregister preview buffer
-         * and register postview buffer with surface flinger. Set ext2
-         * as 0 to indicate not to play shutter sound.
-         */
+         * and register postview buffer with surface flinger. */
         mNotifyCallback(CAMERA_MSG_SHUTTER, (int32_t)&size, 0,
                         mCallbackCookie);
         mShutterPending = false;
@@ -3595,11 +3580,6 @@ void QualcommCameraHardware::notifyShutter(common_crop_t *crop, bool mPlayShutte
 static void receive_shutter_callback(common_crop_t *crop)
 {
     LOGV("receive_shutter_callback: E");
-    sp<QualcommCameraHardware> obj = QualcommCameraHardware::getInstance();
-    if (obj != 0) {
-        /* Just play shutter sound at this time */
-        obj->notifyShutter(crop, TRUE);
-    }
     LOGV("receive_shutter_callback: X");
 }
 
@@ -3640,8 +3620,6 @@ void QualcommCameraHardware::receiveRawSnapshot(){
     LOGV("receiveRawSnapshot E");
 
     Mutex::Autolock cbLock(&mCallbackLock);
-    /* Issue notifyShutter with mPlayShutterSoundOnly as TRUE */
-    notifyShutter(&mCrop, TRUE);
 
     if (mDataCallback && (mMsgEnabled & CAMERA_MSG_COMPRESSED_IMAGE)) {
 
@@ -3655,7 +3633,7 @@ void QualcommCameraHardware::receiveRawSnapshot(){
          * That is necessary otherwise the preview memory wont be
          * deallocated.
          */
-        notifyShutter(&mCrop, FALSE);
+        notifyShutter(&mCrop);
 
         //Create a Ashmem heap to copy data from PMem heap for application layer
         if(mRawSnapshotAshmemHeap != NULL){
@@ -3715,7 +3693,7 @@ void QualcommCameraHardware::receiveRawPicture()
 
             // By the time native_get_picture returns, picture is taken. Call
             // shutter callback if cam config thread has not done that.
-            notifyShutter(&mCrop, FALSE);
+            notifyShutter(&mCrop);
                     crop_yuv420(mCrop.out2_w, mCrop.out2_h, (mCrop.in2_w + jpegPadding), (mCrop.in2_h + jpegPadding),
                             (uint8_t *)mRawHeap->mHeap->base());
                     crop_yuv420(mCrop.out1_w, mCrop.out1_h, (mCrop.in1_w + jpegPadding), (mCrop.in1_h + jpegPadding),
@@ -3731,7 +3709,7 @@ void QualcommCameraHardware::receiveRawPicture()
             memset(&mCrop, 0 ,sizeof(mCrop));
             // By the time native_get_picture returns, picture is taken. Call
             // shutter callback if cam config thread has not done that.
-            notifyShutter(&mCrop, FALSE);
+            notifyShutter(&mCrop);
         }
 
 	if( mUseOverlay && (mOverlay != NULL) ) {

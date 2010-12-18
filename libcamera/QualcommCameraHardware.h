@@ -401,7 +401,7 @@ public:
     void receiveJpegPicture(void);
     void jpeg_set_location();
     void receiveJpegPictureFragment(uint8_t *buf, uint32_t size);
-    void notifyShutter(common_crop_t *crop, bool mPlayShutterSoundOnly);
+    void notifyShutter(common_crop_t *crop);
     void receive_camframetimeout();
 
 private:
