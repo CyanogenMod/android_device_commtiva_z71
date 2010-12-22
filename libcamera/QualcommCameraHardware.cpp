@@ -2703,6 +2703,19 @@ void QualcommCameraHardware::runAutoFocus()
     isp3a_af_mode_t afMode;
 
     mAutoFocusThreadLock.lock();
+
+    if(!sensorType->hasAutoFocusSupport){
+        bool status = false;
+        mCallbackLock.lock();
+        bool autoFocusEnabled = mNotifyCallback && (mMsgEnabled & CAMERA_MSG_FOCUS);
+        notify_callback cb = mNotifyCallback;
+        void *data = mCallbackCookie;
+        mCallbackLock.unlock();
+        if (autoFocusEnabled)
+            cb(CAMERA_MSG_FOCUS, true, 0, data);
+        goto done;
+    }
+
     // Skip autofocus if focus mode is infinity.
     if ((mParameters.get(CameraParameters::KEY_FOCUS_MODE) == 0)
            || (strcmp(mParameters.get(CameraParameters::KEY_FOCUS_MODE),
@@ -2846,19 +2859,6 @@ status_t QualcommCameraHardware::autoFocus()
 {
     LOGV("autoFocus E");
     Mutex::Autolock l(&mLock);
-
-    if(!sensorType->hasAutoFocusSupport){
-        bool status = false;
-        mCallbackLock.lock();
-        bool autoFocusEnabled = mNotifyCallback && (mMsgEnabled & CAMERA_MSG_FOCUS);
-        notify_callback cb = mNotifyCallback;
-        void *data = mCallbackCookie;
-        mCallbackLock.unlock();
-        if (autoFocusEnabled)
-            cb(CAMERA_MSG_FOCUS, true, 0, data);
-        LOGV("autoFocus X");
-        return NO_ERROR;
-    }
 
     if (mCameraControlFd < 0) {
         LOGE("not starting autofocus: main control fd %d", mCameraControlFd);
