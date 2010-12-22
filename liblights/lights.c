@@ -405,7 +405,7 @@ static int open_lights(const struct hw_module_t* module, char const* name,
     else if (0 == strcmp(LIGHT_ID_ATTENTION, name)) {
         set_light = set_light_attention;
     }
-    else if (0 == strcmp(LIGHT_ID_CAPS, name)) {
+    /*else if (0 == strcmp(LIGHT_ID_CAPS, name)) {
         set_light = set_light_caps;
     }
     else if (0 == strcmp(LIGHT_ID_FUNC, name)) {
@@ -413,7 +413,7 @@ static int open_lights(const struct hw_module_t* module, char const* name,
     }
     else if (0 == strcmp(LIGHT_ID_WIMAX, name)) {
         set_light = set_light_wimax;
-    }
+    }*/
     else {
         return -EINVAL;
     }
