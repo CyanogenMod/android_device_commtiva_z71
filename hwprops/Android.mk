@@ -18,6 +18,8 @@ ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),z71)
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
+LOCAL_MODULE_TAGS := optional
+
 LOCAL_SRC_FILES := hwprops.c
 
 LOCAL_PRELINK_MODULE := false

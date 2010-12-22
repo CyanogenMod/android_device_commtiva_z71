@@ -1,6 +1,6 @@
 #include <string.h>
 #include <fcntl.h>
-//#include <sys/mount.h>
+#include <sys/mount.h>
 
 /* Set baseband and serialnumber properties on FIH devices, since they're
  * not exported by the bootloader to cmdline as expected */
@@ -19,7 +19,7 @@ int main() {
 	char b[256];
 	int bc;
 
-	//mount("rootfs","/","rootfs",MS_REMOUNT|0,NULL);
+	mount("rootfs","/","rootfs",MS_REMOUNT|0,NULL);
 
 	fd = open("/proc/baseband",O_RDONLY);
 	if (fd<0)
@@ -30,7 +30,7 @@ int main() {
 	fd = open("/default.prop", O_WRONLY|O_APPEND);
 	if (fd>0){
 		write(fd,"ro.baseband=",12);
-		write(fd,b,strlen(b));
+		write(fd,b,bc);
 		close (fd);
 	}
 
@@ -43,7 +43,7 @@ int main() {
 	fd = open("/default.prop", O_WRONLY|O_APPEND);
 	if (fd>0){
 		write(fd,"ro.serialno=",12);
-		write(fd,b,strlen(b));
+		write(fd,b,bc);
 		close (fd);
 	}
 
