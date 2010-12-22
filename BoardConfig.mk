@@ -23,8 +23,6 @@ TARGET_BOOTLOADER_BOARD_NAME := z71
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
 #TARGET_USES_2G_VM_SPLIT := true
 
-BOARD_GPS_LIBRARIES := libloc_api
-
 TARGET_OTA_ASSERT_DEVICE := z71
 
 BOARD_KERNEL_CMDLINE := mem=210M console=null androidboot.hardware=qcom no_console_suspend
@@ -41,3 +39,17 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 TARGET_PREBUILT_KERNEL := device/commtiva/z71/kernel
 
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/commtiva/z71/recovery_ui.c
+
+BOARD_NO_RGBX_8888 := true
+
+#BOARD_GPS_LIBRARIES := libloc_api
+
+TARGET_LIBAGL_USE_GRALLOC_COPYBITS := true
+
+JS_ENGINE := jsc
+ENABLE_JSC_JIT:=true
+
+# to enable the GPS HAL
+BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := z71
+# AMSS version to use for GPS
+BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 6225

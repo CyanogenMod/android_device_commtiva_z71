@@ -22,10 +22,13 @@ $(call inherit-product-if-exists, vendor/commtiva/z71/z71-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/commtiva/z71/overlay
 
-# HAL libs
+# HAL libs and other system binaries
 PRODUCT_PACKAGES += \
+	hwprops \
+    gps.z71 \
     lights.z71 \
-    copybit.z71
+    copybit.z71 \
+    libOmxCore
 
 # Extra apps
 PRODUCT_PACKAGES += \
@@ -55,6 +58,7 @@ PRODUCT_COPY_FILES += \
 
 # Board-specific init
 PRODUCT_COPY_FILES += \
+    device/commtiva/z71/ueventd.qct.rc:root/ueventd.qct.rc \
     device/commtiva/z71/init.qcom.rc:root/init.qcom.rc
 
 ## RIL related stuff
@@ -111,12 +115,9 @@ PRODUCT_COPY_FILES += \
     frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     frameworks/base/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
     frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
-    frameworks/base/data/etc/android.hardware.touchscreen.multitouch.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.xml
+    frameworks/base/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml
 
-## GPS - this is actually the standard libloc_api, but with the RPC program
-#       version changed from 10001 to 40001
 PRODUCT_COPY_FILES += \
-    device/commtiva/z71/prebuilt/libloc_api.so:system/lib/libloc_api.so \
     device/commtiva/z71/prebuilt/librpc.so:system/lib/librpc.so
 
 ## Camera proprietaries
@@ -174,5 +175,6 @@ PRODUCT_COPY_FILES += \
 $(call inherit-product, build/target/product/full.mk)
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
-PRODUCT_NAME := generic_z71
+PRODUCT_NAME := z71
 PRODUCT_DEVICE := z71
+PRODUCT_MODEL := Commtiva Z71

@@ -1,4 +1,4 @@
-on nand
+on fs
 
     mkdir /misc
     mount yaffs2 mtd@misc /misc nosuid nodev
@@ -17,7 +17,7 @@ on nand
     symlink /dev/lightsensor /dev/cm3602_alsps
 
 on early-init
-    exec /sbin/hwprops
+    start hwprops
 
 on property:dev.bootcomplete=1
 #+++FIH_misty enable keypad interrupt until boot complete
@@ -76,6 +76,11 @@ on boot
 on property:init.svc.bluetoothd=running
     write /sys/devices/virtual/bluetooth/hci0/idle_timeout 7000
     start abtfilt
+
+service hwprops /sbin/hwprops
+    critical
+    disabled
+    oneshot
 
 service hciattach /system/bin/sh /system/bin/init.qcom.bt.sh
     user bluetooth
