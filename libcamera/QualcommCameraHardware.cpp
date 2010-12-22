@@ -3098,28 +3098,28 @@ extern "C" sp<CameraHardwareInterface> openCameraHardware()
     return QualcommCameraHardware::createInstance();
 }
 
-    static CameraInfo sCameraInfo[] = {
-        {
-            CAMERA_FACING_BACK,
-            90,  /* orientation */
-        }
-    };
+static CameraInfo sCameraInfo[] = {
+	{
+		CAMERA_FACING_BACK,
+		90,  /* orientation */
+	}
+};
 
-    extern "C" int HAL_getNumberOfCameras()
-    {
-        return sizeof(sCameraInfo) / sizeof(sCameraInfo[0]);
-    }
+extern "C" int HAL_getNumberOfCameras()
+{
+	return sizeof(sCameraInfo) / sizeof(sCameraInfo[0]);
+}
 
-    extern "C" void HAL_getCameraInfo(int cameraId, struct CameraInfo* cameraInfo)
-    {
-        memcpy(cameraInfo, &sCameraInfo[cameraId], sizeof(CameraInfo));
-    }
+extern "C" void HAL_getCameraInfo(int cameraId, struct CameraInfo* cameraInfo)
+{
+	memcpy(cameraInfo, &sCameraInfo[cameraId], sizeof(CameraInfo));
+}
 
-    extern "C" sp<CameraHardwareInterface> HAL_openCameraHardware(int cameraId)
-    {
-        LOGV("openCameraHardware: call createInstance");
-        return QualcommCameraHardware::createInstance();
-    }
+extern "C" sp<CameraHardwareInterface> HAL_openCameraHardware(int cameraId)
+{
+	LOGV("openCameraHardware: call createInstance");
+	return QualcommCameraHardware::createInstance();
+}
 
 wp<QualcommCameraHardware> QualcommCameraHardware::singleton;
 
