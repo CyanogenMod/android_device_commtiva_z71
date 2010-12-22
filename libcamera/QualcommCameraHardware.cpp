@@ -2855,7 +2855,7 @@ status_t QualcommCameraHardware::autoFocus()
         void *data = mCallbackCookie;
         mCallbackLock.unlock();
         if (autoFocusEnabled)
-            cb(CAMERA_MSG_FOCUS, status, 0, data);
+            cb(CAMERA_MSG_FOCUS, true, 0, data);
         LOGV("autoFocus X");
         return NO_ERROR;
     }
@@ -3098,6 +3098,29 @@ extern "C" sp<CameraHardwareInterface> openCameraHardware()
     return QualcommCameraHardware::createInstance();
 }
 
+    static CameraInfo sCameraInfo[] = {
+        {
+            CAMERA_FACING_BACK,
+            90,  /* orientation */
+        }
+    };
+
+    extern "C" int HAL_getNumberOfCameras()
+    {
+        return sizeof(sCameraInfo) / sizeof(sCameraInfo[0]);
+    }
+
+    extern "C" void HAL_getCameraInfo(int cameraId, struct CameraInfo* cameraInfo)
+    {
+        memcpy(cameraInfo, &sCameraInfo[cameraId], sizeof(CameraInfo));
+    }
+
+    extern "C" sp<CameraHardwareInterface> HAL_openCameraHardware(int cameraId)
+    {
+        LOGV("openCameraHardware: call createInstance");
+        return QualcommCameraHardware::createInstance();
+    }
+
 wp<QualcommCameraHardware> QualcommCameraHardware::singleton;
 
 // If the hardware already exists, return a strong pointer to the current
@@ -3299,28 +3322,6 @@ void QualcommCameraHardware::receivePreviewFrame(struct msm_frame *frame)
     common_crop_t *crop = (common_crop_t *) (frame->cropinfo);
 
     mInPreviewCallback = true;
-    if(mUseOverlay) {
-	if(mOverlay != NULL) {
-	    mOverlayLock.lock();
-	    mOverlay->setFd(mPreviewHeap->mHeap->getHeapID());
-	    if (crop->in2_w != 0 || crop->in2_h != 0) {
-		zoomCropInfo.x = (crop->out2_w - crop->in2_w + 1) / 2 - 1;
-		zoomCropInfo.y = (crop->out2_h - crop->in2_h + 1) / 2 - 1;
-		zoomCropInfo.w = crop->in2_w;
-		zoomCropInfo.h = crop->in2_h;
-		mOverlay->setCrop(zoomCropInfo.x, zoomCropInfo.y,
-			zoomCropInfo.w, zoomCropInfo.h);
-	    } else {
-                // Reset zoomCropInfo variables. This will ensure that
-                // stale values wont be used for postview
-                zoomCropInfo.w = crop->in2_w;
-                zoomCropInfo.h = crop->in2_h;
-            }
-	    mOverlay->queueBuffer((void *)offset_addr);
-            mLastQueuedFrame = (void *)frame->buffer;
-	    mOverlayLock.unlock();
-	}
-    } else {
 	if (crop->in2_w != 0 || crop->in2_h != 0) {
 	    dstOffset = (dstOffset + 1) % NUM_MORE_BUFS;
 	    offset = kPreviewBufferCount + dstOffset;
@@ -3331,7 +3332,6 @@ void QualcommCameraHardware::receivePreviewFrame(struct msm_frame *frame)
                 offset = offset_addr / mPreviewHeap->mAlignedBufferSize;
 	    }
 	}
-    }
     if (pcb != NULL && (msgEnabled & CAMERA_MSG_PREVIEW_FRAME))
         pcb(CAMERA_MSG_PREVIEW_FRAME, mPreviewHeap->mBuffers[offset],
             pdata);
@@ -3712,16 +3712,6 @@ void QualcommCameraHardware::receiveRawPicture()
             notifyShutter(&mCrop);
         }
 
-	if( mUseOverlay && (mOverlay != NULL) ) {
-	    mOverlay->setFd(mPostViewHeap->mHeap->getHeapID());
-	    if( zoomCropInfo.w !=0 && zoomCropInfo.h !=0) {
-		LOGD(" zoomCropInfo non-zero, setting crop ");
-		mOverlay->setCrop(zoomCropInfo.x, zoomCropInfo.y,
-			zoomCropInfo.w, zoomCropInfo.h);
-	    }
-	    LOGD(" Queueing Postview for display ");
-	    mOverlay->queueBuffer((void *)0);
-	}
    if (mDataCallback && (mMsgEnabled & CAMERA_MSG_RAW_IMAGE))
        mDataCallback(CAMERA_MSG_RAW_IMAGE, mDisplayHeap->mBuffers[0],
                             mCallbackCookie);
