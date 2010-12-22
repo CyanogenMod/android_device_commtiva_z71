@@ -2,6 +2,7 @@ ifeq ($(WIFI_DRIVER_MODULE_NAME),ar6000)
 
 LOCAL_PATH := $(my-dir)
 include $(CLEAR_VARS)
+LOCAL_MODULE_TAGS := optional
 
 # From autoconf-generated Makefile
 abtfilt_SOURCES = abtfilt_bluez_dbus.c \
