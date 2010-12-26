@@ -28,6 +28,7 @@ PRODUCT_PACKAGES += \
     gps.z71 \
     lights.z71 \
     copybit.z71 \
+    gralloc.z71 \
     libOmxCore
 
 # Extra apps
@@ -157,13 +158,7 @@ PRODUCT_COPY_FILES += \
     vendor/commtiva/z71/proprietary/lib/egl/libGLESv2_adreno200.so:system/lib/egl/libGLESv2_adreno200.so \
     vendor/commtiva/z71/proprietary/etc/firmware/yamato_pfp.fw:system/etc/firmware/yamato_pfp.fw \
     vendor/commtiva/z71/proprietary/etc/firmware/yamato_pm4.fw:system/etc/firmware/yamato_pm4.fw \
-    vendor/commtiva/z71/proprietary/lib/libgsl.so:system/lib/libgsl.so \
-    vendor/commtiva/z71/proprietary/lib/hw/gralloc.msm7k.so:system/lib/hw/gralloc.msm7k.so \
-    vendor/commtiva/z71/proprietary/lib/hw/gralloc.default.so:system/lib/hw/gralloc.default.so
-
-### TEMPORARY NOTE
-# gralloc: gralloc-qsd8k is causing crashes. why?
-### TEMPORARY NOTE
+    vendor/commtiva/z71/proprietary/lib/libgsl.so:system/lib/libgsl.so
 
 PRODUCT_COPY_FILES += \
     device/commtiva/z71/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \
