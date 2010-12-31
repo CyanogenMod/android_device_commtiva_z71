@@ -318,15 +318,15 @@ typedef unsigned int exif_tag_id_t;
 
 typedef struct {
 	int val;
-	unsigned int otherval;
+	int otherval;
 } rat_t;
 
 
-typedef struct {
-	char * _ascii; /* At byte 16 relative to exif_tag_entry_t */
-	rat_t * _rats;
-	/*rat_t  _rat;
-	uint8_t _byte;*/
+typedef union {
+        char * _ascii; /* At byte 16 relative to exif_tag_entry_t */
+        rat_t * _rats;
+        rat_t  _rat;
+        uint8_t _byte;
 } exif_tag_data_t;
 
 /* The entire exif_tag_entry_t struct must be 24 bytes in length */

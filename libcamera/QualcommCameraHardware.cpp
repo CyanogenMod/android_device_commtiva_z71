@@ -283,7 +283,7 @@ static inline unsigned clp2(unsigned x)
 }
 
 static int exif_table_numEntries = 0;
-#define MAX_EXIF_TABLE_ENTRIES 8
+#define MAX_EXIF_TABLE_ENTRIES 7
 exif_tags_info_t exif_data[MAX_EXIF_TABLE_ENTRIES];
 static zoom_crop_info zoomCropInfo;
 static void *mLastQueuedFrame = NULL;
@@ -1716,11 +1716,11 @@ static void addExifTag(exif_tag_id_t tagid, exif_tag_type_t type,
     if((type == EXIF_RATIONAL) && (count > 1))
         exif_data[index].tag_entry.data._rats = (rat_t *)data;
     if((type == EXIF_RATIONAL) && (count == 1))
-		return;
+		exif_data[index].tag_entry.data._rat = *(rat_t *)data;
     else if(type == EXIF_ASCII)
         exif_data[index].tag_entry.data._ascii = (char *)data;
     else if(type == EXIF_BYTE)
-		return;
+		exif_data[index].tag_entry.data._byte = *(uint8_t *)data;
 
     // Increase number of entries
     exif_table_numEntries++;
