@@ -13,8 +13,6 @@
 # Nexian A-890 Journey
 #
 
-$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
-
 # The gps config appropriate for this device
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
@@ -167,7 +165,7 @@ PRODUCT_COPY_FILES += \
     device/commtiva/z71/7x27_kybd.kl:system/usr/keylayout/7x27_kybd.kl
 
 
-$(call inherit-product, build/target/product/full.mk)
+$(call inherit-product, build/target/product/full_base.mk)
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_NAME := z71
