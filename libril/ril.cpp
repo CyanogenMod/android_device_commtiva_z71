@@ -2802,6 +2802,7 @@ void getOperatorFromModem(char **p_cur) {
     char *spn=NULL;
 	int fd=open("/dev/smd0",O_RDWR);
     int old_flags;
+	int read_bytes=0;
 
 	if (fd<=0) {
 		return;
@@ -2813,18 +2814,22 @@ void getOperatorFromModem(char **p_cur) {
 
 	write(fd,"AT+COPS=3,0;+COPS?;+COPS=3,1;+COPS?\r",36);
 	sleep(1);
-    read(fd,sync_buf,sizeof(sync_buf));
-    if (strlen(sync_buf)) {
+    read_bytes = read(fd,sync_buf,sizeof(sync_buf));
+    if (read_bytes) {
         /* Skip first echoed line */
-        while (*readbuf != '\n' && *readbuf !='\0') {
+        while (read_bytes && *readbuf != '\n' && *readbuf !='\0') {
             readbuf++;
+			read_bytes--;
         }
+        /* Nothing left */
+        if (!read_bytes) { return; }
         /* Find PLMN */
         plmn = getNextValueFromAtLine(&readbuf);
         /* Find SPN */
         spn = getNextValueFromAtLine(&readbuf);
 
-		if (strlen(plmn) && strlen(spn)) {
+		if (plmn != NULL && spn != NULL &&
+				strlen(plmn) && strlen(spn)) {
 			p_cur[0]=strdup(plmn);
 			p_cur[1]=strdup(spn);
 		}
