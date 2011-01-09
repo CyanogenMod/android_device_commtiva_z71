@@ -37,7 +37,7 @@ enum {
 };
 
 #define NUM_BUFFERS 2
-#define NO_SURFACEFLINGER_SWAPINTERVAL
+#undef NO_SURFACEFLINGER_SWAPINTERVAL
 #define INTERLACE_MASK 0x80
 /*****************************************************************************/
 #ifdef __cplusplus

@@ -90,7 +90,7 @@ struct board_property{
 
 #define MINIMUM_FPS 10
 #define DEFAULT_FPS 15
-#define MAXIMUM_FPS 20
+#define MAXIMUM_FPS 25
 
 typedef struct {
 	unsigned int in1_w;
