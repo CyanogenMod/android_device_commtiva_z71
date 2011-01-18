@@ -22,11 +22,12 @@ DEVICE_PACKAGE_OVERLAYS += device/commtiva/z71/overlay
 
 # HAL libs and other system binaries
 PRODUCT_PACKAGES += \
-	hwprops \
+    hwprops \
     gps.z71 \
     lights.z71 \
     copybit.z71 \
     gralloc.z71 \
+    libaudio.z71 \
     libOmxCore
 
 # Extra apps

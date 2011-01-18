@@ -1,13 +1,12 @@
 ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),z71)
 
-## Ugly hack: override default libaudio
-MODULE.TARGET.SHARED_LIBRARIES.libaudio :=
 
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_MODULE_TAGS := optional
 
-LOCAL_MODULE := libaudio
+LOCAL_MODULE := libaudio.z71
+LOCAL_MODULE_STEM:=libaudio
 
 LOCAL_SHARED_LIBRARIES := \
     libcutils \
