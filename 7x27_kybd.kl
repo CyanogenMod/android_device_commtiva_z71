@@ -100,13 +100,8 @@ key 183   FOCUS
 key 217	  SEARCH
 key 58	  SHIFT_LEFT
 
-# F9XX for mapping RING_SWITCH,             Revised by PeterKCTseng @20090522
-key 184 RING_SWITCH        WAKE
-
 # F9XX for mapping HEADSETHOOK KEY,         Revised by PeterKCTseng @20090522
 key 227   HEADSETHOOK
 # F9XX for mapping BROWSER KEY,         Revised by TeddyYang @20090723
 key 192   BROWSER
 
-# F9XX/FST for mapping BACK COVER KEY,         Revised by NicoleWeng @20100526
-key 193   BACK_COVER	WAKE
