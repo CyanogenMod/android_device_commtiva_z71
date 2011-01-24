@@ -5,9 +5,7 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_MODULE_TAGS := optional
 
-LOCAL_MODULE := libaudio.z71
-LOCAL_PRELINK_MODULE := false
-LOCAL_BUILT_MODULE_STEM := libaudio
+LOCAL_MODULE := libaudio
 
 LOCAL_SHARED_LIBRARIES := \
     libcutils \
@@ -33,8 +31,6 @@ ifeq ($(BOARD_HAVE_BLUETOOTH),true)
 endif
 
 include $(BUILD_SHARED_LIBRARY)
-
-PRODUCT_COPY_FILES += $(LOCAL_BUILT_MODULE):system/lib/libaudio.so
 
 endif
 

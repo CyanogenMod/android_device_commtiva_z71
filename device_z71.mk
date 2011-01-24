@@ -27,7 +27,6 @@ PRODUCT_PACKAGES += \
     lights.z71 \
     copybit.z71 \
     gralloc.z71 \
-    libaudio.z71 \
     libOmxCore
 
 # Extra apps
