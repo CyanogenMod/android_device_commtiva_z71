@@ -1,6 +1,6 @@
 # Copyright 2006 The Android Open Source Project
 
-ifeq ($(FORCE_BUILD_OF_HACKED_QC_RIL),true)
+ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),z71)
 
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
@@ -17,9 +17,6 @@ LOCAL_SHARED_LIBRARIES := \
     libhardware_legacy
 
 LOCAL_CFLAGS :=
-ifdef BOARD_USE_NEW_LIBRIL_HTC
-    LOCAL_CFLAGS += -DNEW_LIBRIL_HTC
-endif
 
 LOCAL_MODULE:= libril
 
@@ -27,4 +24,4 @@ LOCAL_LDLIBS += -lpthread
 
 include $(BUILD_SHARED_LIBRARY)
 
-endif # FORCE_BUILD_OF_HACKED_QC_RIL
+endif # TARGET_BOOTLOADER_BOARD_NAME==z71
