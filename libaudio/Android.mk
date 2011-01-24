@@ -5,9 +5,7 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_MODULE_TAGS := optional
 
-LOCAL_MODULE := libaudio.z71
-LOCAL_PRELINK_MODULE := false
-LOCAL_BUILT_MODULE_STEM := libaudio
+LOCAL_MODULE := libaudio
 
 LOCAL_SHARED_LIBRARIES := \
     libcutils \
@@ -34,7 +32,28 @@ endif
 
 include $(BUILD_SHARED_LIBRARY)
 
-PRODUCT_COPY_FILES += $(LOCAL_BUILT_MODULE):system/lib/libaudio.so
+LOCAL_PATH := hardware/msm7k/libaudio
+
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES:=               \
+    AudioPolicyManager.cpp
+
+LOCAL_SHARED_LIBRARIES := \
+    libcutils \
+    libutils \
+    libmedia
+
+LOCAL_MODULE_TAGS := optional
+LOCAL_STATIC_LIBRARIES := libaudiopolicybase
+
+LOCAL_MODULE:= libaudiopolicy
+
+ifeq ($(BOARD_HAVE_BLUETOOTH),true)
+  LOCAL_CFLAGS += -DWITH_A2DP
+endif
+
+include $(BUILD_SHARED_LIBRARY)
 
 endif
 
