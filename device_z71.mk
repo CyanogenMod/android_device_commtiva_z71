@@ -128,7 +128,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/commtiva/z71/prebuilt/data.patch.hw2_0.bin:system/etc/firmware/data.patch.hw2_0.bin \
     device/commtiva/z71/prebuilt/eeprom.bin:system/etc/firmware/eeprom.bin \
-    device/commtiva/z71/prebuilt/athwlan.bin.z77:system/etc/firmware/athwlan.bin.z77
+    device/commtiva/z71/prebuilt/athwlan.bin.z77:system/etc/firmware/athwlan.bin.z77 \
+    device/commtiva/z71/hostapd.conf:system/etc/wifi/hostapd.conf \
+    vendor/commtiva/z71/proprietary/bin/hostapd:system/bin/hostapd
 
 ## Other libraries and proprietary binaries
 PRODUCT_COPY_FILES += \
