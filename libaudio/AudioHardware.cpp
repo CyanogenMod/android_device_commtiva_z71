@@ -394,10 +394,10 @@ status_t AudioHardware::setParameters(const String8& keyValuePairs)
         } else {
             mTtyMode = TTY_OFF;
         }
-        doRouting(NULL);
     } else {
         mTtyMode = TTY_OFF;
     }
+    doRouting(NULL);
 
     return NO_ERROR;
 }
