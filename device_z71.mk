@@ -116,9 +116,6 @@ PRODUCT_COPY_FILES += \
     frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
     frameworks/base/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml
 
-PRODUCT_COPY_FILES += \
-    device/commtiva/z71/prebuilt/librpc.so:system/lib/librpc.so
-
 ## Camera proprietaries
 PRODUCT_COPY_FILES += \
     vendor/commtiva/z71/proprietary/lib/liboemcamera.so:system/lib/liboemcamera.so \
