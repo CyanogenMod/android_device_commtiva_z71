@@ -45,7 +45,7 @@
 
     <bool name="config_automatic_brightness_available">true</bool>
 
-    <integer name="config_lightSensorWarmupTime">1500</integer>
+    <integer name="config_lightSensorWarmupTime">250</integer>
 
     <!-- Array of light sensor LUX values to define our levels for auto backlight brightness support.
          The N entries of this array define N + 1 zones as follows:
