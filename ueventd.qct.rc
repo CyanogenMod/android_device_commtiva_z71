@@ -5,3 +5,4 @@
 /dev/smdcntl1               0640   radio    radio
 /dev/smdcntl2               0640   radio    radio
 /dev/kgsl-3d0               0666   root       root
+/dev/msm_preproc_ctl        0660   system   audio
