@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2010-2011 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +16,7 @@
  */
 
 
-// #define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "lights"
 
 #include <cutils/log.h>
@@ -39,6 +40,7 @@ static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 static int g_haveTrackballLight = 0;
 static struct light_state_t g_notification;
 static struct light_state_t g_battery;
+static struct light_state_t g_applied;
 static int g_backlight = 255;
 static int g_trackball = -1;
 static int g_buttons = 0;
@@ -79,16 +81,6 @@ char const*const KEYBOARD_FILE
 
 char const*const BUTTON_FILE
         = "/sys/class/leds/button-backlight/brightness";
-
-char const*const CAPS_FILE
-        = "/sys/class/leds/caps/brightness";
-
-char const*const FUNC_FILE
-        = "/sys/class/leds/func/brightness";
-
-char const*const WIMAX_FILE
-        = "/sys/class/leds/wimax/brightness";
-
 
 /**
  * device methods
@@ -202,45 +194,6 @@ set_light_buttons(struct light_device_t* dev,
 }
 
 static int
-set_light_wimax(struct light_device_t* dev,
-        struct light_state_t const* state)
-{
-    int err = 0;
-    int brightness = rgb_to_brightness(state);
-    pthread_mutex_lock(&g_lock);
-    g_wimax = brightness;
-    err = write_int(WIMAX_FILE, brightness);
-    pthread_mutex_unlock(&g_lock);
-    return err;
-}
-
-static int
-set_light_caps(struct light_device_t* dev,
-        struct light_state_t const* state)
-{
-    int err = 0;
-    int on = is_lit(state);
-    pthread_mutex_lock(&g_lock);
-    g_caps = on;
-    err = write_int(CAPS_FILE, on?255:0);
-    pthread_mutex_unlock(&g_lock);
-    return err;
-}
-
-static int
-set_light_func(struct light_device_t* dev,
-        struct light_state_t const* state)
-{
-    int err = 0;
-    int on = is_lit(state);
-    pthread_mutex_lock(&g_lock);
-    g_func = on;
-    err = write_int(FUNC_FILE, on?255:0);
-    pthread_mutex_unlock(&g_lock);
-    return err;
-}
-
-static int
 set_front_light_locked(struct light_device_t* dev,
         struct light_state_t const* state)
 {
@@ -264,10 +217,8 @@ set_front_light_locked(struct light_device_t* dev,
 
     colorRGB = state->color;
 
-#if 0
     LOGD("set_front_light_locked colorRGB=%08X, onMS=%d, offMS=%d\n",
             colorRGB, onMS, offMS);
-#endif
 
     red = (colorRGB >> 16) & 0xFF;
     green = (colorRGB >> 8) & 0xFF;
@@ -277,10 +228,10 @@ set_front_light_locked(struct light_device_t* dev,
     if (red) {
         write_int(RED_LED_FILE, 1);
         write_int(RED_BLINK_FILE, 0);
-	} else {
+    } else {
         write_int(RED_LED_FILE, 0);
         write_int(RED_BLINK_FILE, 0);
-	}
+    }
 
     if (green) {
         write_int(GREEN_LED_FILE, 1);
@@ -288,23 +239,23 @@ set_front_light_locked(struct light_device_t* dev,
     } else {
         write_int(GREEN_LED_FILE, 0);
         write_int(GREEN_BLINK_FILE, 0);
-	}
+    }
 
     if (onMS > 0 && offMS > 0)
         blink = 1;
 
     if (blink) {
-		  if (red) {
-			write_int(RED_LED_FILE, 0);
-		    write_int(RED_BLINK_FILE, 1);
-		  }
-		  if (green) {
+        if (red && onMS != 0x1337) {
+            write_int(RED_LED_FILE, 0);
+            write_int(RED_BLINK_FILE, 1);
+        }
+        if (green && onMS != 0x1338) {
             write_int(GREEN_LED_FILE, 0);
-		    write_int(GREEN_BLINK_FILE, 1);
-		  }
-	}
+            write_int(GREEN_BLINK_FILE, 1);
+        }
+    }
 
-	/* Always blink power button if there's a notification */
+    /* Always blink power button if there's a notification */
     write_int("/sys/bus/i2c/devices/0-0045/powerbtn", blink ? 1 : 0);
 
     return 0;
@@ -314,10 +265,32 @@ static void
 handle_front_battery_locked(struct light_device_t* dev)
 {
     if (is_lit(&g_battery)) {
-        set_front_light_locked(dev, &g_battery);
+        unsigned int newRGB = 0;
+        int red = (g_battery.color >> 16) & 0xFF;
+        int green = (g_battery.color >> 8) & 0xFF;
+
+        g_applied.flashOnMS = g_notification.flashOnMS;
+        g_applied.flashMode = g_notification.flashMode;
+
+        if (!red)
+            red = (g_notification.color >> 16) & 0xFF;
+        else
+            g_applied.flashOnMS = 0x1337;
+        if (!green)
+            green = (g_notification.color >> 8) & 0xFF;
+        else
+            g_applied.flashOnMS = 0x1338;
+
+        g_applied.flashOffMS = g_notification.flashOffMS;
+
+        newRGB += 0xFF<<24;
+        newRGB += (red ? 0xFF<<16 : 0);
+        newRGB += (green ? 0xFF<<8 : 0);
+        g_applied.color = newRGB;
     } else {
-        set_front_light_locked(dev, &g_notification);
+        g_applied = g_notification;
     }
+    set_front_light_locked(dev, &g_applied);
 }
 
 static int
@@ -405,15 +378,6 @@ static int open_lights(const struct hw_module_t* module, char const* name,
     else if (0 == strcmp(LIGHT_ID_ATTENTION, name)) {
         set_light = set_light_attention;
     }
-    /*else if (0 == strcmp(LIGHT_ID_CAPS, name)) {
-        set_light = set_light_caps;
-    }
-    else if (0 == strcmp(LIGHT_ID_FUNC, name)) {
-        set_light = set_light_func;
-    }
-    else if (0 == strcmp(LIGHT_ID_WIMAX, name)) {
-        set_light = set_light_wimax;
-    }*/
     else {
         return -EINVAL;
     }
@@ -446,7 +410,7 @@ const struct hw_module_t HAL_MODULE_INFO_SYM = {
     .version_major = 1,
     .version_minor = 0,
     .id = LIGHTS_HARDWARE_MODULE_ID,
-    .name = "QCT MSM7K lights Module",
-    .author = "Google, Inc.",
+    .name = "Commtiva z71 lights Module",
+    .author = "CyanogenMod Project",
     .methods = &lights_module_methods,
 };
