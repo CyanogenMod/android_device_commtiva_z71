@@ -67,8 +67,10 @@ on boot
     chown system camera /sys/devices/platform/flashlight.0/leds/flashlight/brightness
     chmod 0660 /sys/devices/platform/flashlight.0/leds/flashlight/brightness
 
-	# Red LED blink
-	chown system system /sys/class/leds/red/blink
+    # LED blinkers
+    chown system system /sys/class/leds/red/blink
+    chown system system /sys/class/leds/green/blink
+    chown system system /sys/bus/i2c/devices/0-0045/powerbtn
 
 on property:init.svc.bluetoothd=running
     write /sys/devices/virtual/bluetooth/hci0/idle_timeout 7000
