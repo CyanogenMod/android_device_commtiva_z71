@@ -102,6 +102,3 @@ key 58	  SHIFT_LEFT
 
 # F9XX for mapping HEADSETHOOK KEY,         Revised by PeterKCTseng @20090522
 key 227   HEADSETHOOK
-# F9XX for mapping BROWSER KEY,         Revised by TeddyYang @20090723
-key 192   BROWSER
-
