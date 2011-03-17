@@ -16,8 +16,6 @@
 # The gps config appropriate for this device
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
-$(call inherit-product-if-exists, vendor/commtiva/z71/z71-vendor.mk)
-
 DEVICE_PACKAGE_OVERLAYS += device/commtiva/z71/overlay
 
 # HAL libs and other system binaries

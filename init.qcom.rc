@@ -51,7 +51,7 @@ on boot
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
 
-	## Wifi RFKill
+    ## Wifi RFKill
     chown wifi wifi /sys/class/rfkill/rfkill1/state
     chmod 0660 /sys/class/rfkill/rfkill1/state
 

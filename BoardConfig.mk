@@ -10,9 +10,6 @@ WIFI_DRIVER_MODULE_PATH     := rfkill
 BOARD_WPA_SUPPLICANT_DRIVER:=WEXT
 
 
-# inherit from the proprietary version
--include vendor/commtiva/z71/BoardConfigVendor.mk
-
 TARGET_NO_BOOTLOADER := true
 #TARGET_NO_RECOVERY := true
 TARGET_CPU_ABI := armeabi
@@ -22,7 +19,6 @@ TARGET_CPU_ABI := armeabi
 TARGET_BOOTLOADER_BOARD_NAME := z71
 
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
-#TARGET_USES_2G_VM_SPLIT := true
 
 TARGET_OTA_ASSERT_DEVICE := z71
 
