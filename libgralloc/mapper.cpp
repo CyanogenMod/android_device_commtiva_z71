@@ -50,14 +50,6 @@ pid_t gettid() { return syscall(__NR_gettid);}
 #undef __KERNEL__
 #endif
 
-// Pulled from CAF's pmem_android and ashmem headers
-struct pmem_addr {
-        unsigned long vaddr;
-        unsigned long offset;
-        unsigned long length;
-};
-
-#define PMEM_CLEAN_CACHES       _IOW(PMEM_IOCTL_MAGIC, 12, unsigned int)
 #define ASHMEM_CACHE_CLEAN_RANGE	_IO(__ASHMEMIOC, 12)
 #define GRALLOC_MODULE_PERFORM_DECIDE_PUSH_BUFFER_HANDLING 0x080000002
 
