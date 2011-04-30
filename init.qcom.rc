@@ -101,7 +101,7 @@ service hostapd /system/bin/logwrapper /system/bin/hostapd /data/misc/wifi/hosta
     disabled
     oneshot
 
-service dhcpcd /system/bin/dhcpcd -B wlan0
+service dhcpcd_wlan0 /system/bin/dhcpcd -B wlan0
     disabled
     oneshot
 
