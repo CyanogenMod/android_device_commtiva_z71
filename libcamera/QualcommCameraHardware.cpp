@@ -215,7 +215,7 @@ static const camera_size_type picture_sizes[] = {
     { 1280, 768 }, //WXGA
     { 1280, 720 }, //HD720
     { 1024, 768}, // 1MP XGA
-    { 800, 600 }, //SVGA
+    //{ 800, 600 }, //SVGA
     { 800, 480 }, // WVGA
     { 640, 480 }, // VGA
     { 352, 288 }, //CIF
