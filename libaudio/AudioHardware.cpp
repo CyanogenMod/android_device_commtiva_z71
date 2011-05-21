@@ -91,7 +91,7 @@ static uint32_t SND_DEVICE_NO_MIC_HEADSET=-1;
 
 AudioHardware::AudioHardware() :
     mInit(false), mMicMute(true), mBluetoothNrec(true), mBluetoothId(0),
-    mOutput(0), mSndEndpoints(NULL), mCurSndDevice(-1), mDualMicEnabled(false)
+    mOutput(0), mSndEndpoints(NULL), mCurSndDevice(-1), mDualMicEnabled(false), mBuiltinMicSelected(false)
 {
    if (get_audpp_filter() == 0) {
            audpp_filter_inited = true;
@@ -1121,9 +1121,20 @@ status_t AudioHardware::doAudioRouteOrMute(uint32_t device)
         }
     }
 #endif
-    LOGV("doAudioRouteOrMute() device %x, mMode %d, mMicMute %d", device, mMode, mMicMute);
-    return do_route_audio_rpc(device,
-                              mMode != AudioSystem::MODE_IN_CALL, mMicMute, m7xsnddriverfd);
+    /* QCOM caveat: Audio will be routed to speaker if device=handset and mute=true */
+    /* Also, the audio circuit causes battery drain unless mute=true */
+    /* Android < 2.0 uses MODE_IN_CALL for routing audio to earpiece */
+    /* Android >= 2.0 advises to use STREAM_VOICE_CALL streams and setSpeakerphoneOn() */
+    /* Android >= 2.3 uses MODE_IN_COMMUNICATION for SIP calls */
+    bool mute = !isInCall();
+    if(mute && (device == SND_DEVICE_HANDSET)) {
+        /* workaround to emulate Android >= 2.0 behaviour */
+        /* enable routing to earpiece (unmute) if mic is selected as input */
+        mute = !mBuiltinMicSelected;
+    }
+    LOGD("doAudioRouteOrMute() device %x, mMode %d, mMicMute %d, mBuiltinMicSelected %d, %s",
+        device, mMode, mMicMute, mBuiltinMicSelected, mute ? "muted" : "audio circuit active");
+    return do_route_audio_rpc(device, mute, mMicMute, m7xsnddriverfd);
 }
 
 status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
@@ -1141,6 +1152,7 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
     if (input != NULL) {
         uint32_t inputDevice = input->devices();
         LOGI("do input routing device %x\n", inputDevice);
+        mBuiltinMicSelected = (inputDevice == AudioSystem::DEVICE_IN_BUILTIN_MIC);
         // ignore routing device information when we start a recording in voice
         // call
         // Recording will happen through currently active tx device

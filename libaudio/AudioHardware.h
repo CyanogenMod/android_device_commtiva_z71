@@ -305,6 +305,8 @@ private:
             bool        mDualMicEnabled;
             int         mTtyMode;
 
+            bool        mBuiltinMicSelected;
+
      friend class AudioStreamInMSM72xx;
             Mutex       mLock;
 };
