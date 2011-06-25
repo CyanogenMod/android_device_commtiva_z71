@@ -21,7 +21,7 @@ wifi.interface=wlan0
 
 ## QC RIL doesn't replay call rings
 ro.telephony.call_ring.multiple=false
-ro.telephony.call_ring.delay=5000
+ro.telephony.call_ring.delay=1000
 
 # Respect ALS setting, turn it off if not in use
 ro.hardware.respect_als=true
