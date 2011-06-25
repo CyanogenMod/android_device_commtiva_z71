@@ -28,6 +28,13 @@ on property:dev.bootcomplete=1
 
 #---enable keypad interrupt until boot complete
 on boot
+
+    ## cpufreq configurations
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor ondemand
+    write /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate 500000
+    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold 90
+    write /sys/devices/system/cpu/cpufreq/ondemand/down_threshold 30
+
     ## RIL needs this
     mkdir /data/radio 0777
 
