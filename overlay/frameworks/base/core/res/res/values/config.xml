@@ -112,5 +112,8 @@
          It is recommended that this value be no more than 250 ms.
          This feature should be disabled for most devices. -->
     <integer name="config_virtualKeyQuietTimeMillis">200</integer>
+	
+	<!-- Configure rotary bottom margin -->
+    <integer name="config_rotaryMarginBottomDIP">40</integer>
 
 </resources>
