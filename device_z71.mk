@@ -138,7 +138,6 @@ PRODUCT_COPY_FILES += \
     device/commtiva/z71/ms3c_transformation.cfg:system/etc/ms3c_transformation.cfg \
     vendor/commtiva/z71/proprietary/bin/updateSensorNV:system/bin/updateSensorNV \
     vendor/commtiva/z71/proprietary/bin/sensorserver_yamaha:system/bin/sensorserver_yamaha \
-    device/commtiva/z71/prebuilt/sensordaemon:system/bin/sensordaemon \
     vendor/commtiva/z71/proprietary/lib/hw/sensors.qcom.so:system/lib/hw/sensors.qcom.so \
     vendor/commtiva/z71/proprietary/bin/gsensorcalibration:system/bin/gsensorcalibration \
     device/commtiva/z71/prebuilt/SensorCalibration.apk:system/app/SensorCalibration.apk \

@@ -5,6 +5,7 @@ on fs
     chown system system /misc
     chmod 0777 /misc
     mkdir /misc/sensor 0777 system system
+    mkdir /misc/ms3c 0775 system system
 
     mkdir /misc2
     mount yaffs2 mtd@misc2 /misc2 nosuid nodev
@@ -16,6 +17,12 @@ on fs
     ## Used by libsensors
     symlink /dev/lightsensor /dev/cm3602_alsps
 
+    ## Copy stock files to a writeable location
+    copy /system/etc/ms3c_transformation.cfg /misc/ms3c/transformation.cf
+    copy /system/etc/ms3c_charger_offset.cfg /misc/ms3c/charger_offset.cf
+    chown system system /misc/ms3c/transformation.cf
+    chown system system /misc/ms3c/charger_offset.cf
+
 on early-init
     start hwprops
 
@@ -23,8 +30,6 @@ on property:dev.bootcomplete=1
 #+++FIH_misty enable keypad interrupt until boot complete
     chmod 0666 /sys/module/7x27_kybd/parameters/EnableKeyIntrrupt
     write /sys/module/7x27_kybd/parameters/EnableKeyIntrrupt 1
-    start sensor-fix
-
 
 #---enable keypad interrupt until boot complete
 on boot
@@ -122,6 +127,3 @@ service sensor-daemon /system/bin/sensorserver_yamaha
     user root
     group root 
 
-service sensor-fix /system/bin/sensordaemon
-    disabled
-    oneshot
