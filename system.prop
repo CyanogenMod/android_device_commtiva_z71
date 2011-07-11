@@ -25,3 +25,6 @@ ro.telephony.call_ring.delay=1000
 
 # Respect ALS setting, turn it off if not in use
 ro.hardware.respect_als=true
+
+# This is a high density device with more memory, so larger vm heaps for it.
+dalvik.vm.heapsize=24m
