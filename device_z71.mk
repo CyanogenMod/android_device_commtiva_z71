@@ -24,7 +24,7 @@ PRODUCT_PACKAGES += \
     abtfilt \
     gps.z71 \
     lights.z71 \
-    copybit.z71 \
+    copybit.msm7k \
     gralloc.z71 \
     libOmxCore
 
